@@ -28,7 +28,7 @@ public class StudentsView extends AbstractListForm {
 
     @Override
     public void editElement() {
-
+        UI.getCurrent().getNavigator().navigateTo("student");
     }
 
     @Override

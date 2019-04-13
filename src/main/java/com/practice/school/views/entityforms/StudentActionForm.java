@@ -16,6 +16,7 @@ abstract class StudentActionForm extends BasicWindowForm {
         ResourceBundle bundle = MainUI.getResourceBundle();
         final DateField dateField = new DateField(bundle.getString("DateField"));
         final ComboBox<Student> studentField = new ComboBox<>(bundle.getString("StudentField"));
+        dateField.setLocale(bundle.getLocale());
 
         getMainBody().addComponents(
                 studentField,

@@ -22,12 +22,12 @@ public class ExamsView extends AbstractListForm {
 
     @Override
     public void addElement() {
-
+        UI.getCurrent().getNavigator().navigateTo("exam");
     }
 
     @Override
     public void editElement() {
-
+        UI.getCurrent().getNavigator().navigateTo("exam");
     }
 
     @Override

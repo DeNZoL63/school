@@ -23,16 +23,15 @@ public class PaymentsView extends AbstractListForm {
 
     @Override
     public void addElement() {
-
+        UI.getCurrent().getNavigator().navigateTo("payment");
     }
 
     @Override
     public void editElement() {
-
+        UI.getCurrent().getNavigator().navigateTo("payment");
     }
 
     @Override
     public void deleteElement() {
-
     }
 }

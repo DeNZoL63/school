@@ -23,11 +23,6 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
     private final HorizontalLayout mainButtonsGroup;
     private FormLayout formLayout;
 
-
-    FormLayout getMainBody() {
-        return formLayout;
-    }
-
     BasicWindowForm() {
         setWindowMode(WindowMode.MAXIMIZED);
         this.setModal(true);
@@ -53,30 +48,22 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
         setContent(form);
     }
 
-    private void fillMainBody(){
-        mainBody = new VerticalLayout();
-
-        formLayout = new FormLayout();
-        formLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-        formLayout.setSizeUndefined();
-
-        mainBody.addComponent(formLayout);
-        mainBody.setComponentAlignment(formLayout, Alignment.MIDDLE_CENTER);
+    @Override
+    public Component getViewComponent() {
+        return new VerticalLayout();
     }
 
-    private void setFormAligment() {
-        form.setDefaultComponentAlignment(Alignment.TOP_CENTER);
-        form.setComponentAlignment(buttonsLocale, Alignment.TOP_RIGHT);
-        form.setComponentAlignment(header, Alignment.TOP_CENTER);
-        form.setComponentAlignment(mainButtonsGroup, Alignment.TOP_CENTER);
-        form.setSizeFull();
+    public VerticalLayout getForm() {
+        return form;
     }
 
-    private void setRatio() {
-        form.setExpandRatio(buttonsLocale, 4f);
-        form.setExpandRatio(header, 12f);
-        form.setExpandRatio(mainBody, 80f);
-        form.setExpandRatio(mainButtonsGroup, 4f);
+    FormLayout getMainBody() {
+        return formLayout;
+    }
+
+    void setHeaderTitle(String title) {
+        header.setValue(title);
+        header.setStyleName(ValoTheme.LABEL_H1);
     }
 
     private HorizontalLayout getButtonsGroup() {
@@ -111,17 +98,29 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
         return buttonsGroup;
     }
 
-    public VerticalLayout getForm() {
-        return form;
+    private void fillMainBody(){
+        mainBody = new VerticalLayout();
+
+        formLayout = new FormLayout();
+        formLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+        formLayout.setSizeUndefined();
+
+        mainBody.addComponent(formLayout);
+        mainBody.setComponentAlignment(formLayout, Alignment.MIDDLE_CENTER);
     }
 
-    void setHeaderTitle(String title) {
-        header.setValue(title);
-        header.setStyleName(ValoTheme.LABEL_H1);
+    private void setFormAligment() {
+        form.setDefaultComponentAlignment(Alignment.TOP_CENTER);
+        form.setComponentAlignment(buttonsLocale, Alignment.TOP_RIGHT);
+        form.setComponentAlignment(header, Alignment.TOP_CENTER);
+        form.setComponentAlignment(mainButtonsGroup, Alignment.TOP_CENTER);
+        form.setSizeFull();
     }
 
-    @Override
-    public Component getViewComponent() {
-        return new VerticalLayout();
+    private void setRatio() {
+        form.setExpandRatio(buttonsLocale, 4f);
+        form.setExpandRatio(header, 12f);
+        form.setExpandRatio(mainBody, 80f);
+        form.setExpandRatio(mainButtonsGroup, 4f);
     }
 }

@@ -3,9 +3,7 @@ package com.practice.school;
 import com.practice.school.interfaces.CheckUser;
 import com.practice.school.views.LogonView;
 import com.practice.school.views.MainWindowView;
-import com.practice.school.views.entityforms.LessonView;
-import com.practice.school.views.entityforms.StudentView;
-import com.practice.school.views.entityforms.TeacherView;
+import com.practice.school.views.entityforms.*;
 import com.practice.school.views.listforms.*;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
@@ -110,6 +108,8 @@ public class MainUI extends UI implements View {
         navigator.addView("student", StudentView.class);
         navigator.addView("teacher", TeacherView.class);
         navigator.addView("lesson", LessonView.class);
+        navigator.addView("exam", ExamView.class);
+        navigator.addView("payment", PaymentView.class);
     }
 
     private CssLayout getMenu() {

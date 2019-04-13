@@ -23,6 +23,8 @@ public class LessonView extends StudentActionForm {
         final DateField timeField = new DateField(bundle.getString("TimeField"));
         final ComboBox<Teacher> teacherField = new ComboBox<>(bundle.getString("TeacherField"));
         final TextField gpsField = new TextField(bundle.getString("GPSField"));
+        timeField.setLocale(bundle.getLocale());
+        timeField.setDateFormat("hh:mm");
 
         formLayout.addComponents(
                 timeField,
