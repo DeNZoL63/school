@@ -30,11 +30,6 @@ public class LessonView extends StudentActionForm {
                 gpsField);
     }
 
-    @Override
-    public Component getViewComponent() {
-        return new VerticalLayout();
-    }
-
     private void customForm(){
         bundle = MainUI.getResourceBundle();
         UI.getCurrent().getPage().setTitle(bundle.getString("TitleFormLesson"));

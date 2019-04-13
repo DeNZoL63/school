@@ -21,11 +21,10 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
     private VerticalLayout mainBody;
     private final HorizontalLayout buttonsLocale;
     private final HorizontalLayout mainButtonsGroup;
-    private ResourceBundle bundle = MainUI.getResourceBundle();
     private FormLayout formLayout;
 
 
-    public FormLayout getMainBody() {
+    FormLayout getMainBody() {
         return formLayout;
     }
 
@@ -119,5 +118,10 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
     void setHeaderTitle(String title) {
         header.setValue(title);
         header.setStyleName(ValoTheme.LABEL_H1);
+    }
+
+    @Override
+    public Component getViewComponent() {
+        return new VerticalLayout();
     }
 }

@@ -1,8 +1,9 @@
 package com.practice.school.views.entityforms;
 
 import com.practice.school.MainUI;
-import com.vaadin.shared.ui.window.WindowMode;
-import com.vaadin.ui.*;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ResourceBundle;
@@ -13,11 +14,8 @@ public class TeacherView extends PersonForm {
 
     @Autowired
     public TeacherView() {
-        super();
-        VerticalLayout form = getForm();
         customForm();
         fillForm();
-        setContent(form);
     }
 
     private void fillForm() {
@@ -31,18 +29,7 @@ public class TeacherView extends PersonForm {
                 licenseNumberField);
     }
 
-    @Override
-    public Component getViewComponent() {
-        return new VerticalLayout();
-    }
-
     private void customForm(){
-        setWindowMode(WindowMode.MAXIMIZED);
-        this.setModal(true);
-        setClosable(false);
-        setResizable(false);
-
-        UI.getCurrent().addWindow(this);
         bundle = MainUI.getResourceBundle();
         UI.getCurrent().getPage().setTitle(bundle.getString("TitleFormTeacher"));
         setHeaderTitle(bundle.getString("TitleFormTeacher"));
