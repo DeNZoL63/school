@@ -1,6 +1,0 @@
-/*C1*/SET SCHEMA SYSTEM_LOBS
-INSERT INTO BLOCKS VALUES(0,2147483647,0)
-COMMIT
-/*C2*/SET SCHEMA PUBLIC
-create table students (id bigint not null, have_license boolean, phone varchar(12), photo varchar(255), primary key (id))
-create sequence hibernate_sequence start with 1 increment by 1

@@ -1,17 +1,16 @@
 package com.practice.school.entity;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.Optional;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "Students")
+@Table(name = "STUDENTS")
 public class Student extends Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(unique = true, nullable = false)
-    private long id;
+    @Column
+    private Long id;
 
     @Column(length = 12)
     private String phone;
@@ -22,27 +21,50 @@ public class Student extends Person {
     @Column
     private boolean haveLicense;
 
+    @Column(length = 50)
+    private String surname;
+
+    @Column(length = 50)
+    private String name;
+
+    @Column(length = 50)
+    private String patronymic;
+
+    @Column
+    private LocalDate birthday;
+
     public Student() {
 
     }
 
-    public Student(String surname, String firstname, String patronymic, Date birthday, String phone, String photo, boolean haveLicense) {
-        super(surname, firstname, patronymic, birthday);
+    public Student(String surname, String name, String patronymic, LocalDate birthday, String phone, String photo, boolean haveLicense) {
+//        super(surname, name, patronymic, birthday);
+        super();
+        this.surname = surname;
+        this.name = name;
+        this.patronymic = patronymic;
+        this.birthday = birthday;
+
         this.phone = phone;
         this.photo = photo;
         this.haveLicense = haveLicense;
     }
 
-    public Student(long id, String surname, String firstname, String patronymic, Date birthday, String phone, String photo, boolean haveLicense) {
+    public Student(Long id, String surname, String name, String patronymic, LocalDate birthday, String phone, String photo, boolean haveLicense) {
 //        super(id, surname, firstname, patronymic, birthday);
-        super(surname, firstname, patronymic, birthday);
+//        super(surname, name, patronymic, birthday);
+        this.surname = surname;
+        this.name = name;
+        this.patronymic = patronymic;
+        this.birthday = birthday;
+
         this.id = id;
         this.phone = phone;
         this.photo = photo;
         this.haveLicense = haveLicense;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -58,59 +80,35 @@ public class Student extends Person {
         return haveLicense;
     }
 
-
-    @Override
-    public Object save(Object o) {
-        return null;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    @Override
-    public Iterable saveAll(Iterable iterable) {
-        return null;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    @Override
-    public Optional findById(Object o) {
-        return Optional.empty();
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
-    @Override
-    public boolean existsById(Object o) {
-        return false;
+    public void setHaveLicense(boolean haveLicense) {
+        this.haveLicense = haveLicense;
     }
 
-    @Override
-    public Iterable findAll() {
-        return null;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
-    @Override
-    public Iterable findAllById(Iterable iterable) {
-        return null;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    @Override
-    public long count() {
-        return 0;
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
     }
 
-    @Override
-    public void deleteById(Object o) {
-
-    }
-
-    @Override
-    public void delete(Object o) {
-
-    }
-
-    @Override
-    public void deleteAll(Iterable iterable) {
-
-    }
-
-    @Override
-    public void deleteAll() {
-
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
     }
 }

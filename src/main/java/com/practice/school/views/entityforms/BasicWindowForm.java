@@ -7,13 +7,13 @@ import com.practice.school.views.elements.LocaleElement;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.shared.ui.window.WindowMode;
-import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.ResourceBundle;
 
-@SpringView
+//@SpringView
+//@SpringComponent
 abstract class BasicWindowForm extends Window implements View, OkCancelActions, ApplyAction {
 
     private VerticalLayout form = new VerticalLayout();

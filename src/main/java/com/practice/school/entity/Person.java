@@ -1,63 +1,58 @@
 package com.practice.school.entity;
 
-import com.practice.school.dao.CRUDRepository;
+public abstract class Person {
 
-import javax.persistence.Column;
-import java.util.Date;
+//    @Column(length = 50)
+//    private String surname;
 
-public abstract class Person implements CRUDRepository {
+//    @Column(length = 50)
+//    private String name;
 
-    @Column(length = 50)
-    private String surname;
+//    @Column(length = 50)
+//    private String patronymic;
 
-    @Column(length = 50)
-    private String firstname;
-
-    @Column(length = 50)
-    private String patronymic;
-
-    @Column
-    private Date birthday;
+//    @Column
+//    private LocalDate birthday;
 
     Person() {
     }
 
-    Person(String surname, String firstname, String patronymic, Date birthday) {
-        this.surname = surname;
-        this.firstname = firstname;
-        this.patronymic = patronymic;
-        this.birthday = birthday;
-    }
+//    Person(String surname, String name, String patronymic, LocalDate birthday) {
+//        this.surname = surname;
+//        this.name = name;
+//        this.patronymic = patronymic;
+//        this.birthday = birthday;
+//    }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public Date getBirthday() {
-        return birthday;
-    }
+//    public void setSurname(String surname) {
+//        this.surname = surname;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
+//
+//    public void setPatronymic(String patronymic) {
+//        this.patronymic = patronymic;
+//    }
+//
+//    public void setBirthday(LocalDate birthday) {
+//        this.birthday = birthday;
+//    }
+//
+//    public String getSurname() {
+//        return surname;
+//    }
+//
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public String getPatronymic() {
+//        return patronymic;
+//    }
+//
+//    public LocalDate getBirthday() {
+//        return birthday;
+//    }
 }

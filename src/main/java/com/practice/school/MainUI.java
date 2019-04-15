@@ -5,7 +5,6 @@ import com.practice.school.views.LogonView;
 import com.practice.school.views.MainWindowView;
 import com.practice.school.views.entityforms.*;
 import com.practice.school.views.listforms.*;
-import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.PushStateNavigation;
 import com.vaadin.navigator.View;
@@ -21,7 +20,6 @@ import java.util.ResourceBundle;
 
 @SpringUI
 @PushStateNavigation
-@Theme("valo")
 @SpringView
 public class MainUI extends UI implements View {
 
