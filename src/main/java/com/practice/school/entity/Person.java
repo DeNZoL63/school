@@ -1,9 +1,11 @@
 package com.practice.school.entity;
 
+import com.practice.school.dao.CRUDRepository;
+
 import javax.persistence.Column;
 import java.util.Date;
 
-public abstract class Person {
+public abstract class Person implements CRUDRepository {
 
     @Column(length = 50)
     private String surname;
