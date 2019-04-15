@@ -1,4 +1,4 @@
-package com.practice.school.views.entity;
+package com.practice.school.entity;
 
 public enum ExamKindEnum {
     TEST,

@@ -1,14 +1,9 @@
-package com.practice.school.views.entity;
+package com.practice.school.entity;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import java.util.Date;
 
-@Entity
 public abstract class StudentAction {
-
-    @Column(unique = true)
-    private long id;
 
     @Column
     private Student student;
@@ -16,26 +11,12 @@ public abstract class StudentAction {
     @Column
     private Date date;
 
-    public StudentAction() {
+    StudentAction() {
     }
 
-    public StudentAction(long id, Student student, Date date) {
-        this.id = id;
+    StudentAction(Student student, Date date) {
         this.student = student;
         this.date = date;
-    }
-
-    public StudentAction(Student student, Date date) {
-        this.student = student;
-        this.date = date;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public Student getStudent() {

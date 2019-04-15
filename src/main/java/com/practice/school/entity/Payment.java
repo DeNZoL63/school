@@ -1,11 +1,15 @@
-package com.practice.school.views.entity;
+package com.practice.school.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Table(name = "Payments")
 public class Payment extends StudentAction {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column
+    private long id;
 
     @Column
     private double amount;
@@ -19,7 +23,8 @@ public class Payment extends StudentAction {
     }
 
     public Payment(long id, Student student, Date date, double amount) {
-        super(id, student, date);
+        super(student, date);
+        this.id = id;
         this.amount = amount;
     }
 
@@ -29,5 +34,13 @@ public class Payment extends StudentAction {
 
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

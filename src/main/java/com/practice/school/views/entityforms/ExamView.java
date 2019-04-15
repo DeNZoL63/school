@@ -1,7 +1,7 @@
 package com.practice.school.views.entityforms;
 
 import com.practice.school.MainUI;
-import com.practice.school.views.entity.ExamKindEnum;
+import com.practice.school.entity.ExamKindEnum;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.RichTextArea;

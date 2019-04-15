@@ -1,14 +1,9 @@
-package com.practice.school.views.entity;
+package com.practice.school.entity;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import java.util.Date;
 
-@Entity
 public abstract class Person {
-
-    @Column(unique = true, nullable = false)
-    private long id;
 
     @Column(length = 50)
     private String surname;
@@ -22,22 +17,10 @@ public abstract class Person {
     @Column
     private Date birthday;
 
-    public Person() {
+    Person() {
     }
 
-    public Person(long id) {
-        this.id = id;
-    }
-
-    public Person(long id, String surname, String firstname, String patronymic, Date birthday) {
-        this.id = id;
-        this.surname = surname;
-        this.firstname = firstname;
-        this.patronymic = patronymic;
-        this.birthday = birthday;
-    }
-
-    public Person(String surname, String firstname, String patronymic, Date birthday) {
+    Person(String surname, String firstname, String patronymic, Date birthday) {
         this.surname = surname;
         this.firstname = firstname;
         this.patronymic = patronymic;
@@ -58,10 +41,6 @@ public abstract class Person {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
-    }
-
-    public long getId() {
-        return id;
     }
 
     public String getSurname() {

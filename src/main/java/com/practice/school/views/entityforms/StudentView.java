@@ -1,17 +1,12 @@
 package com.practice.school.views.entityforms;
 
 import com.practice.school.MainUI;
-import com.practice.school.dao.DBProvider;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ResourceBundle;
 
 public class StudentView extends PersonForm {
@@ -50,23 +45,7 @@ public class StudentView extends PersonForm {
 
     @Override
     public void okAction() {
-
-        test();
         closeForm();
-    }
-
-    private void test() {
-        ResultSet rs = null;
-        boolean flag = false;
-
-        try(Connection connection = DBProvider.connectToDB();
-            Statement statement = connection.createStatement()) {
-
-            rs = statement.executeQuery("");
-            flag = true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

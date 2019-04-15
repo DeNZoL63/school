@@ -1,11 +1,15 @@
-package com.practice.school.views.entity;
+package com.practice.school.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Table(name = "Exams")
 public class Exam extends StudentAction{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column
+    private long id;
 
     @Column
     private ExamKindEnum examKind;
@@ -22,7 +26,8 @@ public class Exam extends StudentAction{
     }
 
     public Exam(long id, Student student, Date date, ExamKindEnum examKind, String detail, Byte mark) {
-        super(id, student, date);
+        super(student, date);
+        this.id = id;
         this.examKind = examKind;
         this.detail = detail;
         this.mark = mark;
@@ -57,6 +62,14 @@ public class Exam extends StudentAction{
 
     public void setMark(Byte mark) {
         this.mark = mark;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
 

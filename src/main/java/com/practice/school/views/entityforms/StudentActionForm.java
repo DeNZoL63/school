@@ -1,7 +1,7 @@
 package com.practice.school.views.entityforms;
 
 import com.practice.school.MainUI;
-import com.practice.school.views.entity.Student;
+import com.practice.school.entity.Student;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;

@@ -1,11 +1,20 @@
-package com.practice.school.views.entity;
+package com.practice.school.entity;
+
+import org.springframework.data.annotation.Id;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Table;
 import java.util.Date;
 
 @Table(name = "Teachers")
 public class Teacher extends Person {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(unique = true, nullable = false)
+    private long id;
 
     @Column
     private int experience;
@@ -17,11 +26,13 @@ public class Teacher extends Person {
     }
 
     public Teacher(long id) {
-        super(id);
+//        super(id);
+        this.id = id;
     }
 
     public Teacher(long id, String surname, String firstname, String patronymic, Date birthday, int experience, String licenseNumber) {
-        super(id, surname, firstname, patronymic, birthday);
+        super(surname, firstname, patronymic, birthday);
+        this.id = id;
         this.experience = experience;
         this.licenseNumber = licenseNumber;
     }
@@ -46,5 +57,13 @@ public class Teacher extends Person {
 
     public void setLicenseNumber(String licenseNumber) {
         this.licenseNumber = licenseNumber;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

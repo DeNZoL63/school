@@ -1,7 +1,7 @@
 package com.practice.school.views.entityforms;
 
 import com.practice.school.MainUI;
-import com.practice.school.views.entity.Teacher;
+import com.practice.school.entity.Teacher;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
