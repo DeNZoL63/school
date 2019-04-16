@@ -3,6 +3,7 @@ package com.practice.school.views;
 import com.practice.school.MainUI;
 import com.practice.school.interfaces.OkCancelActions;
 import com.practice.school.views.elements.LocaleElement;
+import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.shared.ui.window.WindowMode;
 import com.vaadin.spring.annotation.SpringView;
@@ -97,7 +98,13 @@ public class LogonView extends Window implements View, OkCancelActions {
 
         MainUI.setUser(true);
         close();
-        MainUI.getCurrent().getNavigator().navigateTo("");
+        Navigator navi = MainUI.getCurrent().getNavigator();
+
+        String destanation = navi.getState();
+        if (navi.getState().equals("logon")){
+            destanation = "";
+        }
+        navi.navigateTo(destanation);
     }
 
     @Override
