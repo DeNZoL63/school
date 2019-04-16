@@ -6,8 +6,6 @@ import com.vaadin.ui.TextField;
 
 import java.util.ResourceBundle;
 
-//@SpringView
-//@SpringComponent
 abstract class PersonForm extends BasicWindowForm {
 
     private final TextField nameField;
@@ -15,7 +13,7 @@ abstract class PersonForm extends BasicWindowForm {
     private final TextField patronymicField;
     private final DateField birthdayField;
 
-    public PersonForm() {
+    PersonForm() {
         ResourceBundle bundle = MainUI.getResourceBundle();
 
         nameField = new TextField(bundle.getString("NameField"));
@@ -31,19 +29,19 @@ abstract class PersonForm extends BasicWindowForm {
                 birthdayField);
     }
 
-    public TextField getNameField() {
+    TextField getNameField() {
         return nameField;
     }
 
-    public TextField getSurnameField() {
+    TextField getSurnameField() {
         return surnameField;
     }
 
-    public TextField getPatronymicField() {
+    TextField getPatronymicField() {
         return patronymicField;
     }
 
-    public DateField getBirthdayField() {
+    DateField getBirthdayField() {
         return birthdayField;
     }
 }

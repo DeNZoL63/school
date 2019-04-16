@@ -59,7 +59,7 @@ public class StudentView extends PersonForm {
                 hasLicenseField.getValue()
         );
 
-        studentService.addStudent(student);
+//        studentService.addStudent(student);
     }
 
     private void validateAll() {

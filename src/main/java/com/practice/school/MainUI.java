@@ -1,6 +1,7 @@
 package com.practice.school;
 
 import com.practice.school.interfaces.CheckUser;
+import com.practice.school.views.LogonView;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.PushStateNavigation;
 import com.vaadin.navigator.View;
@@ -39,7 +40,7 @@ public class MainUI extends UI implements View {
     private CssLayout viewContainer = new CssLayout();
 
     @Autowired
-    SpringViewProvider viewProvider;
+    private SpringViewProvider viewProvider;
 
     @Autowired
     private Navigator navigator;
@@ -100,6 +101,7 @@ public class MainUI extends UI implements View {
 
     private void initNavigator() {
         navigator = new Navigator(this, viewContainer);
+        navigator.addProvider(viewProvider);
 //        navigator.addView("", LogonView.class);
 //        navigator.addView("main", MainWindowView.class);
 //        navigator.addView("students", StudentsView.class);
@@ -112,7 +114,6 @@ public class MainUI extends UI implements View {
 //        navigator.addView("lesson", LessonView.class);
 //        navigator.addView("exam", ExamView.class);
 //        navigator.addView("payment", PaymentView.class);
-        navigator.addProvider(viewProvider);
     }
 
     private CssLayout getMenu() {
@@ -135,7 +136,7 @@ public class MainUI extends UI implements View {
         Button paymentsButton = new Button(resourceBundle.getString("PaymentsMenuKey"), e -> getNavigator().navigateTo("payments"));
         paymentsButton.addStyleNames(ValoTheme.BUTTON_QUIET, ValoTheme.MENU_ITEM);
 
-        Button exit = new Button(resourceBundle.getString("ExitMenuKey"), e -> getNavigator().navigateTo("logon"));
+        Button exit = new Button(resourceBundle.getString("ExitMenuKey"), e -> new LogonView());
         exit.addStyleNames(ValoTheme.BUTTON_QUIET, ValoTheme.MENU_ITEM);
 
         CssLayout menu = new CssLayout(title, studentsButton, teachersButton, lessonsButton, examsButton, paymentsButton, exit);

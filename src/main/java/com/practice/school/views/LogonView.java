@@ -97,7 +97,7 @@ public class LogonView extends Window implements View, OkCancelActions {
 
         MainUI.setUser(true);
         close();
-        MainUI.getCurrent().getNavigator().navigateTo("main");
+        MainUI.getCurrent().getNavigator().navigateTo("");
     }
 
     @Override

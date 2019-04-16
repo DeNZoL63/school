@@ -1,6 +1,7 @@
 package com.practice.school.views.listforms;
 
 import com.practice.school.MainUI;
+import com.practice.school.views.entityforms.StudentView;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.UI;
@@ -27,12 +28,15 @@ public class StudentsView extends AbstractListForm {
 
     @Override
     public void addElement() {
-        UI.getCurrent().getNavigator().navigateTo("student");
+//        UI.getCurrent().getNavigator().navigateTo("student");
+        new StudentView();
     }
 
     @Override
     public void editElement() {
-        UI.getCurrent().getNavigator().navigateTo("student");
+//        UI.getCurrent().getNavigator().navigateTo("student");
+//        Page.getCurrent().reload();
+        new StudentView();
     }
 
     @Override

@@ -12,8 +12,6 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.ResourceBundle;
 
-//@SpringView
-//@SpringComponent
 abstract class BasicWindowForm extends Window implements View, OkCancelActions, ApplyAction {
 
     private VerticalLayout form = new VerticalLayout();
