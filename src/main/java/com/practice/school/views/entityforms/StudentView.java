@@ -2,7 +2,7 @@ package com.practice.school.views.entityforms;
 
 import com.practice.school.MainUI;
 import com.practice.school.entity.Student;
-import com.practice.school.service.StudentService;
+import com.practice.school.service.impl.StudentServiceImpl;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
@@ -24,7 +24,7 @@ public class StudentView extends PersonForm {
     private CheckBox hasLicenseField;
 
     @Autowired
-    private StudentService studentService;
+    private StudentServiceImpl studentService;
 
     public StudentView() {
         customForm();

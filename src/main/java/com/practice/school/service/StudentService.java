@@ -5,7 +5,12 @@ import com.practice.school.entity.Student;
 import java.util.List;
 
 public interface StudentService {
+
     Student addStudent(Student student);
+
     List<Student> getAll();
 
+    void deleteByID(Long id);
+
+    Student findById(Long id);
 }

@@ -1,6 +1,6 @@
 package com.practice.school;
 
-import com.practice.school.interfaces.CheckUser;
+import com.practice.school.interfaces.CommonMethods;
 import com.practice.school.views.LogonView;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.PushStateNavigation;
@@ -42,9 +42,6 @@ public class MainUI extends UI implements View {
     @Autowired
     private SpringViewProvider viewProvider;
 
-    @Autowired
-    private Navigator navigator;
-
     public static boolean isUser() {
         return user;
     }
@@ -70,7 +67,7 @@ public class MainUI extends UI implements View {
         initNavigator();
         setupLayout();
         addMenu();
-        CheckUser.checkUser();
+        CommonMethods.checkUser();
     }
 
     private void setupLayout() {
@@ -100,7 +97,7 @@ public class MainUI extends UI implements View {
     }
 
     private void initNavigator() {
-        navigator = new Navigator(this, viewContainer);
+        Navigator navigator = new Navigator(this, viewContainer);
         navigator.addProvider(viewProvider);
 //        navigator.addView("", LogonView.class);
 //        navigator.addView("main", MainWindowView.class);
@@ -156,5 +153,9 @@ public class MainUI extends UI implements View {
         menu.setWidth("145px");
 
         return menu;
+    }
+
+    public void setViewProvider(SpringViewProvider viewProvider) {
+        this.viewProvider = viewProvider;
     }
 }

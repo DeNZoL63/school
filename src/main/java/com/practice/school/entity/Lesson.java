@@ -1,16 +1,12 @@
 package com.practice.school.entity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Table;
 import java.sql.Time;
 import java.util.Date;
 
 @Table(name = "Lessons")
 public class Lesson extends StudentAction {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column
-    private long id;
 
     @Column
     private Time time;
@@ -24,9 +20,12 @@ public class Lesson extends StudentAction {
     public Lesson() {
     }
 
+    public Lesson(Long id) {
+        super(id);
+    }
+
     public Lesson(long id, Student student, Date date, Time time, Teacher teacher, String gpsTrack) {
-        super(student, date);
-        this.id = id;
+        super(id, student, date);
         this.time = time;
         this.teacher = teacher;
         this.gpsTrack = gpsTrack;
@@ -61,13 +60,5 @@ public class Lesson extends StudentAction {
 
     public void setGpsTrack(String gpsTrack) {
         this.gpsTrack = gpsTrack;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 }

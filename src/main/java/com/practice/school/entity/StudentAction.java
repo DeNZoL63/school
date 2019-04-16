@@ -3,7 +3,7 @@ package com.practice.school.entity;
 import javax.persistence.Column;
 import java.util.Date;
 
-public abstract class StudentAction {
+public abstract class StudentAction extends BaseEntity {
 
     @Column
     private Student student;
@@ -12,6 +12,16 @@ public abstract class StudentAction {
     private Date date;
 
     StudentAction() {
+    }
+
+    public StudentAction(Long id) {
+        super(id);
+    }
+
+    public StudentAction(Long id, Student student, Date date) {
+        super(id);
+        this.student = student;
+        this.date = date;
     }
 
     StudentAction(Student student, Date date) {

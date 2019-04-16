@@ -1,58 +1,75 @@
 package com.practice.school.entity;
 
-public abstract class Person {
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
+import java.time.LocalDate;
 
-//    @Column(length = 50)
-//    private String surname;
+@MappedSuperclass
+public abstract class Person extends BaseEntity{
 
-//    @Column(length = 50)
-//    private String name;
+    @Column(length = 50)
+    private String surname;
 
-//    @Column(length = 50)
-//    private String patronymic;
+    @Column(length = 50)
+    private String name;
 
-//    @Column
-//    private LocalDate birthday;
+    @Column(length = 50)
+    private String patronymic;
+
+    @Column
+    private LocalDate birthday;
 
     Person() {
     }
 
-//    Person(String surname, String name, String patronymic, LocalDate birthday) {
-//        this.surname = surname;
-//        this.name = name;
-//        this.patronymic = patronymic;
-//        this.birthday = birthday;
-//    }
+    public Person(Long id) {
+        super(id);
+    }
 
-//    public void setSurname(String surname) {
-//        this.surname = surname;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//    public void setPatronymic(String patronymic) {
-//        this.patronymic = patronymic;
-//    }
-//
-//    public void setBirthday(LocalDate birthday) {
-//        this.birthday = birthday;
-//    }
-//
-//    public String getSurname() {
-//        return surname;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public String getPatronymic() {
-//        return patronymic;
-//    }
-//
-//    public LocalDate getBirthday() {
-//        return birthday;
-//    }
+    Person(String surname, String name, String patronymic, LocalDate birthday) {
+        this.surname = surname;
+        this.name = name;
+        this.patronymic = patronymic;
+        this.birthday = birthday;
+    }
+
+    public Person(Long id, String surname, String name, String patronymic, LocalDate birthday) {
+        super(id);
+        this.surname = surname;
+        this.name = name;
+        this.patronymic = patronymic;
+        this.birthday = birthday;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
+    }
+
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPatronymic() {
+        return patronymic;
+    }
+
+    public LocalDate getBirthday() {
+        return birthday;
+    }
 }

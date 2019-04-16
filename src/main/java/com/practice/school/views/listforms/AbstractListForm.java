@@ -12,10 +12,12 @@ import com.vaadin.ui.themes.ValoTheme;
 import java.util.ResourceBundle;
 
 @SpringView
-abstract class AbstractListForm extends Composite implements ListFormActions, View {
+//@Component
+abstract class AbstractListForm<T> extends Composite implements ListFormActions, View {
 
-    private final VerticalLayout form = new VerticalLayout();
-    private final Label header = new Label();
+    private VerticalLayout form = new VerticalLayout();
+    private Label header = new Label();
+    private VerticalLayout gridLayout = new VerticalLayout();
 
     AbstractListForm() {
 
@@ -40,7 +42,7 @@ abstract class AbstractListForm extends Composite implements ListFormActions, Vi
         editButton.setId("editButton");
 
         deleteButton.setStyleName(ValoTheme.BUTTON_TINY);
-        deleteButton.addClickListener((Button.ClickListener) clickEvent -> editElement());
+        deleteButton.addClickListener((Button.ClickListener) clickEvent -> deleteElement());
         deleteButton.setClickShortcut(ShortcutAction.KeyCode.DELETE);
         deleteButton.setDescription(bundle.getString("DeleteKeyDescription"));
         deleteButton.setId("deleteButton");
@@ -48,24 +50,26 @@ abstract class AbstractListForm extends Composite implements ListFormActions, Vi
         buttonsGroup.addComponents(addButton, editButton, deleteButton);
         buttonsGroup.setSizeUndefined();
 
-        Grid<Object> studentsGrid = new Grid<>();
-
         HorizontalLayout buttonsLocale = LocaleElement.getButtonsGroup();
-        form.addComponents(buttonsLocale, header, buttonsGroup, studentsGrid);
+        form.addComponents(buttonsLocale, header, buttonsGroup, gridLayout);
         form.setDefaultComponentAlignment(Alignment.TOP_LEFT);
         form.setComponentAlignment(buttonsLocale, Alignment.TOP_RIGHT);
 
-        studentsGrid.setSizeFull();
+        gridLayout.setSizeFull();
         form.setSizeFull();
 
         form.setExpandRatio(buttonsLocale, 4f);
         form.setExpandRatio(header, 12f);
         form.setExpandRatio(buttonsGroup, 4f);
-        form.setExpandRatio(studentsGrid, 80f);
+        form.setExpandRatio(gridLayout, 80f);
     }
 
     VerticalLayout getForm() {
         return form;
+    }
+
+    VerticalLayout getGridLayout() {
+        return gridLayout;
     }
 
     void setHeaderTitle(String title) {

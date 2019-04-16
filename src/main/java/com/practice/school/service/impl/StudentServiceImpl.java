@@ -28,4 +28,20 @@ public class StudentServiceImpl implements StudentService {
         return (List<Student>) studentRepository.findAll();
     }
 
+    @Override
+    public void deleteByID(Long id) {
+        boolean studentExist = studentRepository.existsById(id);
+
+        if (studentExist){
+            studentRepository.deleteById(id);
+        }
+    }
+
+    @Override
+    public Student findById(Long id) {
+        Student student = new Student();
+
+
+        return student;
+    }
 }
