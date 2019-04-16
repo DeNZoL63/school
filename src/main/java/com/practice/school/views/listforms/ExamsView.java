@@ -1,7 +1,7 @@
 package com.practice.school.views.listforms;
 
 import com.practice.school.MainUI;
-import com.practice.school.views.entityforms.ExamView;
+import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.UI;
@@ -27,14 +27,16 @@ public class ExamsView extends AbstractListForm {
 
     @Override
     public void addElement() {
-//        UI.getCurrent().getNavigator().navigateTo("exam");
-        new ExamView();
+        UI.getCurrent().getNavigator().navigateTo("exam");
+        Page.getCurrent().reload();
+//        new ExamView();
     }
 
     @Override
     public void editElement() {
-//        UI.getCurrent().getNavigator().navigateTo("exam");
-        new ExamView();
+        UI.getCurrent().getNavigator().navigateTo("exam");
+        Page.getCurrent().reload();
+//        new ExamView();
     }
 
     @Override
