@@ -15,7 +15,7 @@ abstract class PersonForm extends BasicWindowForm {
     private final TextField patronymicField;
     private final DateField birthdayField;
 
-    PersonForm() {
+    public PersonForm() {
         ResourceBundle bundle = MainUI.getResourceBundle();
 
         nameField = new TextField(bundle.getString("NameField"));

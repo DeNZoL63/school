@@ -2,17 +2,16 @@ package com.practice.school.views.entityforms;
 
 import com.practice.school.MainUI;
 import com.practice.school.entity.Student;
-import com.practice.school.service.impl.StudentServiceImpl;
-import com.vaadin.spring.annotation.SpringComponent;
+import com.practice.school.service.StudentService;
+import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ResourceBundle;
 
-@SpringComponent
 @UIScope
-//@Route
+@SpringView(name = "student")
 public class StudentView extends PersonForm {
 
     private ResourceBundle bundle;
@@ -25,10 +24,8 @@ public class StudentView extends PersonForm {
     private CheckBox hasLicenseField;
 
     @Autowired
-    //#TODO не может получить репозиторий
-    private StudentServiceImpl studentService;
+    private StudentService studentService;
 
-    @Autowired
     public StudentView() {
         customForm();
         fillForm();
@@ -61,14 +58,6 @@ public class StudentView extends PersonForm {
                 photoField.getValue(),
                 hasLicenseField.getValue()
         );
-//        student.setName(nameField.getValue());
-//        student.setSurname(surnameField.getValue());
-//        student.setPatronymic(patronymicField.getValue());
-//        student.setBirthday(birthdayField.getValue());
-//        student.setPhone(phoneField.getValue());
-//        student.setPhoto(photoField.getValue());
-//        student.setHaveLicense(hasLicenseField.getValue());
-//        student.setId(new Long(13213231));
 
         studentService.addStudent(student);
     }

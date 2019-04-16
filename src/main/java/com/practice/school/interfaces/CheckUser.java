@@ -7,7 +7,7 @@ public interface CheckUser {
     static void checkUser(){
         if (!MainUI.isUser()) {
             //#TODO при старте системы создает 2 окна
-//            UI.getCurrent().getNavigator().navigateTo("");
+//            UI.getCurrent().getNavigator().navigateTo("logon");
         }
     }
 }

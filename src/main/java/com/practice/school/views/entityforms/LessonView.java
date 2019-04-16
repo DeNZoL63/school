@@ -2,11 +2,15 @@ package com.practice.school.views.entityforms;
 
 import com.practice.school.MainUI;
 import com.practice.school.entity.Teacher;
+import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ResourceBundle;
 
+@UIScope
+@SpringView(name = "lesson")
 public class LessonView extends StudentActionForm {
 
     private ResourceBundle bundle;

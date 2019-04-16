@@ -1,6 +1,8 @@
 package com.practice.school.views.entityforms;
 
 import com.practice.school.MainUI;
+import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -8,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ResourceBundle;
 
+@UIScope
+@SpringView(name = "payment")
 public class PaymentView extends StudentActionForm {
 
     private ResourceBundle bundle;

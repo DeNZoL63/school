@@ -1,10 +1,6 @@
 package com.practice.school;
 
 import com.practice.school.interfaces.CheckUser;
-import com.practice.school.views.LogonView;
-import com.practice.school.views.MainWindowView;
-import com.practice.school.views.entityforms.*;
-import com.practice.school.views.listforms.*;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.PushStateNavigation;
 import com.vaadin.navigator.View;
@@ -12,8 +8,10 @@ import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -39,6 +37,12 @@ public class MainUI extends UI implements View {
 
     private HorizontalLayout mainLayout;
     private CssLayout viewContainer = new CssLayout();
+
+    @Autowired
+    SpringViewProvider viewProvider;
+
+    @Autowired
+    private Navigator navigator;
 
     public static boolean isUser() {
         return user;
@@ -95,24 +99,25 @@ public class MainUI extends UI implements View {
     }
 
     private void initNavigator() {
-        Navigator navigator = new Navigator(this, viewContainer);
-        navigator.addView("", LogonView.class);
-        navigator.addView("main", MainWindowView.class);
-        navigator.addView("students", StudentsView.class);
-        navigator.addView("teachers", TeachersView.class);
-        navigator.addView("lessons", LessonsView.class);
-        navigator.addView("exams", ExamsView.class);
-        navigator.addView("payments", PaymentsView.class);
-        navigator.addView("student", StudentView.class);
-        navigator.addView("teacher", TeacherView.class);
-        navigator.addView("lesson", LessonView.class);
-        navigator.addView("exam", ExamView.class);
-        navigator.addView("payment", PaymentView.class);
+        navigator = new Navigator(this, viewContainer);
+//        navigator.addView("", LogonView.class);
+//        navigator.addView("main", MainWindowView.class);
+//        navigator.addView("students", StudentsView.class);
+//        navigator.addView("teachers", TeachersView.class);
+//        navigator.addView("lessons", LessonsView.class);
+//        navigator.addView("exams", ExamsView.class);
+//        navigator.addView("payments", PaymentsView.class);
+//        navigator.addView("student", StudentView.class);
+//        navigator.addView("teacher", TeacherView.class);
+//        navigator.addView("lesson", LessonView.class);
+//        navigator.addView("exam", ExamView.class);
+//        navigator.addView("payment", PaymentView.class);
+        navigator.addProvider(viewProvider);
     }
 
     private CssLayout getMenu() {
 
-        Button title = new Button(resourceBundle.getString("MainMenuKey"), e -> getNavigator().navigateTo("main"));
+        Button title = new Button(resourceBundle.getString("MainMenuKey"), e -> getNavigator().navigateTo(""));
         title.addStyleNames(ValoTheme.BUTTON_QUIET, ValoTheme.MENU_ITEM);
 
         Button studentsButton = new Button(resourceBundle.getString("StudentsMenuKey"), e -> getNavigator().navigateTo("students"));
@@ -130,7 +135,7 @@ public class MainUI extends UI implements View {
         Button paymentsButton = new Button(resourceBundle.getString("PaymentsMenuKey"), e -> getNavigator().navigateTo("payments"));
         paymentsButton.addStyleNames(ValoTheme.BUTTON_QUIET, ValoTheme.MENU_ITEM);
 
-        Button exit = new Button(resourceBundle.getString("ExitMenuKey"), e -> getNavigator().navigateTo(""));
+        Button exit = new Button(resourceBundle.getString("ExitMenuKey"), e -> getNavigator().navigateTo("logon"));
         exit.addStyleNames(ValoTheme.BUTTON_QUIET, ValoTheme.MENU_ITEM);
 
         CssLayout menu = new CssLayout(title, studentsButton, teachersButton, lessonsButton, examsButton, paymentsButton, exit);

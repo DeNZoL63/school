@@ -23,7 +23,7 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
     private final HorizontalLayout mainButtonsGroup;
     private FormLayout formLayout;
 
-    BasicWindowForm() {
+    public BasicWindowForm() {
         setWindowMode(WindowMode.MAXIMIZED);
         this.setModal(true);
         setClosable(false);

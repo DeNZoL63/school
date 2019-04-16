@@ -2,6 +2,8 @@ package com.practice.school.views.entityforms;
 
 import com.practice.school.MainUI;
 import com.practice.school.entity.ExamKindEnum;
+import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.RichTextArea;
@@ -10,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ResourceBundle;
 
+@UIScope
+@SpringView(name = "exam")
 public class ExamView extends StudentActionForm {
 
     private ResourceBundle bundle;

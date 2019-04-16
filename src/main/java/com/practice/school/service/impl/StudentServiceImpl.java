@@ -11,12 +11,12 @@ import java.util.List;
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    @Autowired
-    //#TODO не может получить репозиторий
-    private StudentRepository studentRepository;
+    //#TODO получил репозиторий
+//    @Inject
+    private final StudentRepository studentRepository;
 
     @Autowired
-    public void setStudentRepository(StudentRepository repository) {
+    public StudentServiceImpl(StudentRepository repository) {
         this.studentRepository = repository;
     }
 
@@ -31,4 +31,5 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> getAll() {
         return (List<Student>) studentRepository.findAll();
     }
+
 }

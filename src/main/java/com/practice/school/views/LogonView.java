@@ -6,12 +6,14 @@ import com.practice.school.views.elements.LocaleElement;
 import com.vaadin.navigator.View;
 import com.vaadin.shared.ui.window.WindowMode;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.ResourceBundle;
 
-@SpringView
+@UIScope
+@SpringView(name = "logon")
 public class LogonView extends Window implements View, OkCancelActions {
 
     private VerticalLayout mainLayout;
