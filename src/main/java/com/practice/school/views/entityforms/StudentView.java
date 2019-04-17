@@ -3,6 +3,7 @@ package com.practice.school.views.entityforms;
 import com.practice.school.MainUI;
 import com.practice.school.entity.Student;
 import com.practice.school.service.impl.StudentServiceImpl;
+import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
@@ -15,6 +16,7 @@ import java.util.ResourceBundle;
 public class StudentView extends PersonForm {
 
     private ResourceBundle bundle;
+    private TextField idField = getIdField();
     private TextField nameField = getNameField();
     private TextField surnameField = getSurnameField();
     private TextField patronymicField = getPatronymicField();
@@ -26,9 +28,32 @@ public class StudentView extends PersonForm {
     @Autowired
     private StudentServiceImpl studentService;
 
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+        String parameterID = event.getParameterMap().get("id");
+        if (parameterID.isEmpty()){
+            return;
+        }
+
+        Student student = studentService.findById(Long.valueOf(parameterID));
+
+        if (student == null){
+            return;
+        }
+
+        surnameField.setValue(student.getSurname());
+        nameField.setValue(student.getName());
+        patronymicField.setValue(student.getPatronymic());
+        birthdayField.setValue(student.getBirthday());
+        phoneField.setValue(student.getPhone());
+        photoField.setValue(student.getPhoto());
+        hasLicenseField.setValue(student.isHaveLicense());
+        idField.setValue(student.getId().toString());
+    }
+
     public StudentView() {
         customForm();
-        fillForm();
+        addPersonalElements();
     }
 
     @Override
@@ -40,7 +65,9 @@ public class StudentView extends PersonForm {
 
     @Override
     public void applyAction() {
-        closeForm();
+        validateAll();
+        createStudent();
+//        closeForm();
     }
 
     @Override
@@ -49,24 +76,31 @@ public class StudentView extends PersonForm {
     }
 
     private void createStudent() {
-        Student student = new Student(
-                surnameField.getValue(),
-                nameField.getValue(),
-                patronymicField.getValue(),
-                birthdayField.getValue(),
-                phoneField.getValue(),
-                photoField.getValue(),
-                hasLicenseField.getValue()
-        );
+        Student student = new Student();
+        fillStudent(student);
+
+        if (!idField.isEmpty()){
+            student.setId(Long.valueOf(idField.getValue()));
+        }
 
         studentService.addStudent(student);
+    }
+
+    private void fillStudent(Student student){
+        student.setSurname(surnameField.getValue());
+        student.setName(nameField.getValue());
+        student.setPatronymic(patronymicField.getValue());
+        student.setBirthday(birthdayField.getValue());
+        student.setPhone(phoneField.getValue());
+        student.setPhoto(photoField.getValue());
+        student.setHaveLicense(hasLicenseField.getValue());
     }
 
     private void validateAll() {
 
     }
 
-    private void fillForm() {
+    private void addPersonalElements() {
         FormLayout formLayout = getMainBody();
 
         phoneField = new TextField(bundle.getString("PhoneField"));

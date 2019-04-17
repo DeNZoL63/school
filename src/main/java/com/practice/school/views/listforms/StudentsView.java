@@ -12,6 +12,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Formatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -74,7 +75,7 @@ public class StudentsView extends AbstractListForm {
         if (id == null) {
             return;
         }
-        UI.getCurrent().getNavigator().navigateTo("student");
+        UI.getCurrent().getNavigator().navigateTo(new Formatter().format("student/id=%x", id).toString());
         Page.getCurrent().reload();
     }
 

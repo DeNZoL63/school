@@ -20,6 +20,7 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
     private final HorizontalLayout buttonsLocale;
     private final HorizontalLayout mainButtonsGroup;
     private FormLayout formLayout;
+    private TextField idField;
 
     public BasicWindowForm() {
         setWindowMode(WindowMode.MAXIMIZED);
@@ -96,12 +97,20 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
         return buttonsGroup;
     }
 
+    public TextField getIdField() {
+        return idField;
+    }
+
     private void fillMainBody(){
         mainBody = new VerticalLayout();
 
         formLayout = new FormLayout();
         formLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
         formLayout.setSizeUndefined();
+
+        idField = new TextField("ID");
+        idField.setEnabled(false);
+        formLayout.addComponent(idField);
 
         mainBody.addComponent(formLayout);
         mainBody.setComponentAlignment(formLayout, Alignment.MIDDLE_CENTER);
