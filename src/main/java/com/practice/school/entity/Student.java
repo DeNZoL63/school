@@ -19,7 +19,6 @@ public class Student extends Person {
     private boolean haveLicense;
 
     public Student() {
-
     }
 
     public Student(Long id) {
@@ -48,7 +47,7 @@ public class Student extends Person {
         return photo;
     }
 
-    public boolean isHaveLicense() {
+    public boolean getHaveLicense() {
         return haveLicense;
     }
 

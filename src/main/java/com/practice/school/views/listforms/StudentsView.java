@@ -12,7 +12,6 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Formatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -72,10 +71,10 @@ public class StudentsView extends AbstractListForm {
     public void editElement() {
         Long id = CommonMethods.getSelectedtRow(grid.getSelectedItems());
 
-        if (id == null) {
+        if (id == null || id.equals(Long.valueOf(0))) {
             return;
         }
-        UI.getCurrent().getNavigator().navigateTo(new Formatter().format("student/id=%x", id).toString());
+        UI.getCurrent().getNavigator().navigateTo("student/id=" + id);
         Page.getCurrent().reload();
     }
 

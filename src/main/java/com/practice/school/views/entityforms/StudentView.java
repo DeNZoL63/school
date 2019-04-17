@@ -3,6 +3,9 @@ package com.practice.school.views.entityforms;
 import com.practice.school.MainUI;
 import com.practice.school.entity.Student;
 import com.practice.school.service.impl.StudentServiceImpl;
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationException;
+import com.vaadin.data.converter.StringToLongConverter;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
@@ -15,6 +18,8 @@ import java.util.ResourceBundle;
 @SpringView(name = "student")
 public class StudentView extends PersonForm {
 
+    @Autowired
+    private StudentServiceImpl studentService;
     private ResourceBundle bundle;
     private TextField idField = getIdField();
     private TextField nameField = getNameField();
@@ -23,37 +28,43 @@ public class StudentView extends PersonForm {
     private DateField birthdayField = getBirthdayField();
     private TextField phoneField;
     private TextField photoField;
-    private CheckBox hasLicenseField;
+    private CheckBox haveLicenseField;
+    private Binder<Student> binder = new Binder<>(Student.class);
+    private Student student = new Student();
 
-    @Autowired
-    private StudentServiceImpl studentService;
-
-    @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event) {
-        String parameterID = event.getParameterMap().get("id");
-        if (parameterID.isEmpty()){
-            return;
-        }
-
-        Student student = studentService.findById(Long.valueOf(parameterID));
-
-        if (student == null){
-            return;
-        }
-
-        surnameField.setValue(student.getSurname());
-        nameField.setValue(student.getName());
-        patronymicField.setValue(student.getPatronymic());
-        birthdayField.setValue(student.getBirthday());
-        phoneField.setValue(student.getPhone());
-        photoField.setValue(student.getPhoto());
-        hasLicenseField.setValue(student.isHaveLicense());
-        idField.setValue(student.getId().toString());
-    }
 
     public StudentView() {
         customForm();
         addPersonalElements();
+
+        binder.forField(idField)
+                .withConverter(new StringToLongConverter(bundle.getString("EnterNumberError")))
+                .bind(Student::getId, Student::setId);
+        binder.bind(surnameField, Student::getSurname, Student::setSurname);
+        binder.bind(nameField, Student::getName, Student::setName);
+        binder.bind(patronymicField, Student::getPatronymic, Student::setPatronymic);
+        binder.bind(birthdayField, Student::getBirthday, Student::setBirthday);
+        binder.bind(phoneField, Student::getPhone, Student::setPhone);
+        binder.bind(photoField, Student::getPhoto, Student::setPhoto);
+        binder.bind(haveLicenseField, Student::getHaveLicense, Student::setHaveLicense);
+
+        binder.bindInstanceFields(student);
+    }
+
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+        String parameterID = event.getParameterMap().get("id");
+
+        if (parameterID == null || parameterID.equals("0")){
+            return;
+        }
+
+        this.student = studentService.findById(Long.valueOf(parameterID));
+
+        if (this.student == null){
+            return;
+        }
+        binder.setBean(this.student);
     }
 
     @Override
@@ -67,7 +78,6 @@ public class StudentView extends PersonForm {
     public void applyAction() {
         validateAll();
         createStudent();
-//        closeForm();
     }
 
     @Override
@@ -76,24 +86,14 @@ public class StudentView extends PersonForm {
     }
 
     private void createStudent() {
-        Student student = new Student();
-        fillStudent(student);
-
-        if (!idField.isEmpty()){
-            student.setId(Long.valueOf(idField.getValue()));
+        try {
+            binder.writeBean(student);
+            Student saved = studentService.addStudent(student);
+            idField.setValue(saved.getId().toString());
+        } catch (ValidationException e) {
+            e.printStackTrace();
+            Notification.show(e.getMessage());
         }
-
-        studentService.addStudent(student);
-    }
-
-    private void fillStudent(Student student){
-        student.setSurname(surnameField.getValue());
-        student.setName(nameField.getValue());
-        student.setPatronymic(patronymicField.getValue());
-        student.setBirthday(birthdayField.getValue());
-        student.setPhone(phoneField.getValue());
-        student.setPhoto(photoField.getValue());
-        student.setHaveLicense(hasLicenseField.getValue());
     }
 
     private void validateAll() {
@@ -105,12 +105,12 @@ public class StudentView extends PersonForm {
 
         phoneField = new TextField(bundle.getString("PhoneField"));
         photoField = new TextField(bundle.getString("PhotoField"));
-        hasLicenseField = new CheckBox(bundle.getString("HasLicenseField"));
+        haveLicenseField = new CheckBox(bundle.getString("HasLicenseField"));
 
         formLayout.addComponents(
                 phoneField,
                 photoField,
-                hasLicenseField);
+                haveLicenseField);
     }
 
     private void customForm(){
