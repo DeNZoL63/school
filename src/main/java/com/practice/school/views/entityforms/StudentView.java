@@ -6,6 +6,7 @@ import com.practice.school.service.impl.StudentServiceImpl;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.converter.StringToLongConverter;
+import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
@@ -20,7 +21,7 @@ public class StudentView extends PersonForm {
 
     @Autowired
     private StudentServiceImpl studentService;
-    private ResourceBundle bundle;
+    private ResourceBundle bundle = MainUI.getResourceBundle();
     private TextField idField = getIdField();
     private TextField nameField = getNameField();
     private TextField surnameField = getSurnameField();
@@ -34,21 +35,65 @@ public class StudentView extends PersonForm {
 
 
     public StudentView() {
+        String patternChars = "^[a-zA-Zа-яА-Я]{2,50}$";
+
+        String patternNumbers = "^\\+[0-9]{11,11}$";
+        RegexpValidator validatorLetters = new RegexpValidator(bundle.getString("FieldCharsValidationError"), patternChars);
+        RegexpValidator validatorNumbers = new RegexpValidator(bundle.getString("FieldNumbersValidationError"), patternNumbers);
+
         customForm();
         addPersonalElements();
 
         binder.forField(idField)
                 .withConverter(new StringToLongConverter(bundle.getString("EnterNumberError")))
                 .bind(Student::getId, Student::setId);
-        binder.bind(surnameField, Student::getSurname, Student::setSurname);
-        binder.bind(nameField, Student::getName, Student::setName);
-        binder.bind(patronymicField, Student::getPatronymic, Student::setPatronymic);
+
+        binder.forField(surnameField)
+                .withValidator(StudentView::checkLengthMoreTwo,
+                        bundle.getString("FieldLengthValidationError"))
+                .withValidator(StudentView::checkLengthNotEmpty,
+                        bundle.getString("FieldLengthValidationError"))
+                .withValidator(validatorLetters)
+                .bind(Student::getSurname, Student::setSurname);
+
+
+        binder.forField(nameField)
+                .withValidator(StudentView::checkLengthMoreTwo,
+                        bundle.getString("FieldLengthValidationError"))
+                .withValidator(StudentView::checkLengthNotEmpty,
+                        bundle.getString("FieldLengthValidationError"))
+                .withValidator(validatorLetters)
+                .bind(Student::getName, Student::setName);
+
+
+        binder.forField(patronymicField)
+                .withValidator(StudentView::checkLengthMoreTwo,
+                        bundle.getString("FieldLengthValidationError"))
+                .withValidator(StudentView::checkLengthNotEmpty,
+                        bundle.getString("FieldLengthValidationError"))
+                .withValidator(validatorLetters)
+                .bind(Student::getPatronymic, Student::setPatronymic);
+
+
+        binder.forField(phoneField)
+                .withValidator(validatorNumbers)
+                .bind(Student::getPhone, Student::setPhone);
+
+
         binder.bind(birthdayField, Student::getBirthday, Student::setBirthday);
-        binder.bind(phoneField, Student::getPhone, Student::setPhone);
         binder.bind(photoField, Student::getPhoto, Student::setPhoto);
         binder.bind(haveLicenseField, Student::getHaveLicense, Student::setHaveLicense);
 
         binder.bindInstanceFields(new Student());
+        binder.validate();
+    }
+
+    private static boolean checkLengthMoreTwo(String s) {
+        return s.length() > 2;
+    }
+
+    private static boolean checkLengthNotEmpty(String s) {
+        return s.length() > 0;
     }
 
     @Override
@@ -65,13 +110,15 @@ public class StudentView extends PersonForm {
             return;
         }
         binder.setBean(this.student);
+        binder.validate();
     }
 
     @Override
     public void okAction() {
         validateAll();
-        createStudent();
-        closeForm();
+        if (createStudent()){
+            closeForm();
+        }
     }
 
     @Override
@@ -85,15 +132,22 @@ public class StudentView extends PersonForm {
         closeForm();
     }
 
-    private void createStudent() {
+    private Boolean createStudent() {
+        Boolean result = false;
         try {
-            binder.writeBean(this.student);
-            Student saved = studentService.addStudent(this.student);
-            idField.setValue(saved.getId().toString());
+            if (binder.isValid()) {
+                binder.writeBean(this.student);
+                Student saved = studentService.addStudent(this.student);
+                idField.setValue(saved.getId().toString());
+                result = true;
+            }else{
+                Notification.show(bundle.getString("FillCorrectDataMessage"),"", Notification.Type.HUMANIZED_MESSAGE);
+            }
         } catch (ValidationException e) {
             e.printStackTrace();
             Notification.show(e.getMessage());
         }
+        return result;
     }
 
     private void validateAll() {
@@ -104,6 +158,7 @@ public class StudentView extends PersonForm {
         FormLayout formLayout = getMainBody();
 
         phoneField = new TextField(bundle.getString("PhoneField"));
+        phoneField.setMaxLength(12);
         photoField = new TextField(bundle.getString("PhotoField"));
         haveLicenseField = new CheckBox(bundle.getString("HasLicenseField"));
 
@@ -114,7 +169,6 @@ public class StudentView extends PersonForm {
     }
 
     private void customForm(){
-        bundle = MainUI.getResourceBundle();
         UI.getCurrent().getPage().setTitle(bundle.getString("TitleFormStudent"));
         setHeaderTitle(bundle.getString("TitleFormStudent"));
     }
