@@ -43,4 +43,9 @@ public class PaymentsView extends AbstractListForm {
     @Override
     public void deleteElement() {
     }
+
+    @Override
+    public void editElementDoubleClick(Long id) {
+
+    }
 }

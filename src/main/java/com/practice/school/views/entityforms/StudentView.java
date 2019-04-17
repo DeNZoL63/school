@@ -48,7 +48,7 @@ public class StudentView extends PersonForm {
         binder.bind(photoField, Student::getPhoto, Student::setPhoto);
         binder.bind(haveLicenseField, Student::getHaveLicense, Student::setHaveLicense);
 
-        binder.bindInstanceFields(student);
+        binder.bindInstanceFields(new Student());
     }
 
     @Override
@@ -87,8 +87,8 @@ public class StudentView extends PersonForm {
 
     private void createStudent() {
         try {
-            binder.writeBean(student);
-            Student saved = studentService.addStudent(student);
+            binder.writeBean(this.student);
+            Student saved = studentService.addStudent(this.student);
             idField.setValue(saved.getId().toString());
         } catch (ValidationException e) {
             e.printStackTrace();

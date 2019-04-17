@@ -43,4 +43,9 @@ public class ExamsView extends AbstractListForm {
     public void deleteElement() {
 
     }
+
+    @Override
+    public void editElementDoubleClick(Long id) {
+
+    }
 }
