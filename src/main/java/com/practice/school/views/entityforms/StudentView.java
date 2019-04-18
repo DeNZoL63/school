@@ -16,6 +16,7 @@ import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ResourceBundle;
@@ -34,10 +35,12 @@ public class StudentView extends PersonForm {
     private DateField birthdayField = getBirthdayField();
     private TextField phoneField;
     private TextField photoField;
-    private Image photo2Field;
+    private Image photoImage;
     private CheckBox haveLicenseField;
     private Binder<Student> binder = new Binder<>(Student.class);
     private Student student = new Student();
+    private String pathPhoto = "src/main/resources/static/db_photos/";
+    private File photoFile = new File(pathPhoto + "notfound.jpg");
 
 
     public StudentView() {
@@ -53,6 +56,10 @@ public class StudentView extends PersonForm {
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         String parameterID = event.getParameterMap().get("id");
 
+        photoImage.setSource(new FileResource(photoFile));
+        photoImage.setHeight("300px");
+        photoImage.setWidth("300px");
+
         if (parameterID == null || parameterID.equals("0")){
             return;
         }
@@ -63,6 +70,14 @@ public class StudentView extends PersonForm {
             return;
         }
         binder.setBean(this.student);
+
+        photoFile = new File(student.getPhoto());
+
+        if (!photoFile.exists()) {
+            photoFile = new File(pathPhoto + "notfound.jpg");
+        }
+        photoImage.setSource(new FileResource(photoFile));
+
         binder.validate();
     }
 
@@ -172,64 +187,66 @@ public class StudentView extends PersonForm {
 
         formLayout.addComponents(
                 phoneField,
-//                photoField,
                 haveLicenseField);
 
 
-        // Image as a file resource
-        FileResource resource = new FileResource(new File("db_photos/"+"thousand_words_01.jpg"));
-        final VerticalLayout vL = new VerticalLayout();
-        photo2Field = new Image(bundle.getString("PhotoField"), resource);
-        photo2Field.setHeight("300px");
-        photo2Field.setWidth("300px");
-        vL.addComponent(photo2Field);
+        final VerticalLayout photoPlusForm = new VerticalLayout();
+        photoImage = new Image(bundle.getString("PhotoField"));
 
+        photoPlusForm.addComponent(photoImage);
 
+        Upload upload = createUpload();
 
-        Upload upload = new Upload("", new Upload.Receiver() {
-            @Override
-            public OutputStream receiveUpload(String filename, String mimeType) {
-
-                // Create upload stream
-                OutputStream fos = null; // Stream to write to
-                try {
-                    // Open the file for writing.
-                    File file = new File("db_photos/"+ filename);
-                    fos = new FileOutputStream(file);
-                } catch (final java.io.FileNotFoundException e) {
-                    new Notification("Could not open file<br/>",
-                            e.getMessage(),
-                            Notification.Type.ERROR_MESSAGE)
-                            .show(Page.getCurrent());
-                    return null;
-                }
-                return fos; // Return the output stream to write to
-            }
-        });
-//        upload.setAcceptedFileTypes("image/jpeg", "image/png", "image/gif");
-
-        upload.addSucceededListener(event -> {
-//            Component component = createComponent(event.getMIMEType(),
-//                    event.getFilename(),
-//                    buffer.getInputStream(event.getFilename()));
-            photo2Field.setSource(new FileResource(new File("db_photos/" + event.getFilename())));
-        });
-
-        vL.addComponent(upload);
-
-
+        photoPlusForm.addComponent(upload);
 
         HorizontalLayout mb = getMainBodi();
-//        mb.addComponentAsFirst(photo2Field);
-        mb.addComponent(vL);
-//        mb.setComponentAlignment(photo2Field, Alignment.MIDDLE_RIGHT);
-        mb.setComponentAlignment(vL, Alignment.MIDDLE_RIGHT);
+        mb.addComponent(photoPlusForm);
+        mb.setComponentAlignment(photoPlusForm, Alignment.MIDDLE_RIGHT);
         mb.setComponentAlignment(formLayout, Alignment.MIDDLE_LEFT);
         mb.setSizeUndefined();
-//        formLayout.addComponent(photo2Field);
+    }
 
-//        final HorizontalLayout horizontalLayout = new HorizontalLayout();
-//        horizontalLayout.addComponents(formLayout, photo2Field);
+    private Upload createUpload() {
+        Upload upload = new Upload("", (Upload.Receiver) (filename, mimeType) -> {
+            // Create upload stream
+            OutputStream fos = null; // Stream to write to
+            String nameOfFile = "";
+            try {
+                // Open the file for writing.
+                if (student.getId() == null) {
+                    //#todo сделать локализацию
+                    new Notification("ВНИМАНИЕ",
+                            "Сначала сохраните элемент",
+                            Notification.Type.WARNING_MESSAGE).show(Page.getCurrent());
+                    nameOfFile = pathPhoto + "notfound.jpg";
+//                    return null;
+                }else{
+                    nameOfFile = pathPhoto + student.getId() + "_student.jpg";
+                }
+                photoFile = new File(nameOfFile);
+                fos = new FileOutputStream(photoFile);
+            } catch (final FileNotFoundException e) {
+                new Notification("Could not open file<br/>",
+                        e.getMessage(),
+                        Notification.Type.ERROR_MESSAGE)
+                        .show(Page.getCurrent());
+                nameOfFile = pathPhoto + "notfound.jpg";
+                photoFile = new File(nameOfFile);
+//                return null;
+            }
+            return fos; // Return the output stream to write to
+        });
+
+        upload.addSucceededListener(event -> {
+            if (photoFile == null) {
+                photoFile = new File(pathPhoto + "notfound.jpg");
+            }
+
+            photoImage = new Image(bundle.getString("PhotoField"), new FileResource(photoFile));
+            student.setPhoto(photoFile.getPath());
+            photoField.setValue(photoFile.getPath());
+        });
+        return upload;
     }
 
     private void customForm(){
