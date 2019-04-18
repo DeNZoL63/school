@@ -31,7 +31,7 @@ public class ExamView extends StudentActionForm {
     }
 
     private void fillForm() {
-        FormLayout formLayout = getMainBody();
+        FormLayout formLayout = getFormLayout();
 
         final ComboBox<ExamKindEnum> examKindField = new ComboBox<>(bundle.getString("ExamKindField"));
         final RichTextArea detailField = new RichTextArea(bundle.getString("DetailField"));

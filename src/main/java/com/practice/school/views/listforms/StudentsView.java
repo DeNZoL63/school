@@ -8,7 +8,6 @@ import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +18,15 @@ import java.util.ResourceBundle;
 
 @UIScope
 @SpringView(name = "students")
-public class StudentsView extends AbstractListForm {
+public class StudentsView extends AbstractListForm<Student> {
 
     @Autowired
     private final StudentServiceImpl studentService;
-    private Grid<Student> grid;
+    private Grid<Student> grid = getGrid();
     private final ResourceBundle bundle;
 
     public StudentsView(StudentServiceImpl studentService) {
-        super();
+        super(Student.class);
         this.studentService = studentService;
         VerticalLayout form = getForm();
 
@@ -35,44 +34,11 @@ public class StudentsView extends AbstractListForm {
         String headerText = bundle.getString("StudentsHeaderText");
         setHeaderTitle(headerText);
 
-        createGrid();
         setContentGrid();
-        grid.setColumnOrder("id",
-                "surname",
-                "name",
-                "patronymic",
-                "birthday",
-                "phone",
-                "photo",
-                "haveLicense");
 
         UI.getCurrent().getPage().setTitle(headerText);
         setCompositionRoot(form);
     }
-
-    private void setContentGrid() {
-        List<Student> list = studentService.getAll();
-        grid.setItems(list);
-    }
-
-    private void createGrid() {
-        VerticalLayout gridLayout = getGridLayout();
-        grid = new Grid<>(Student.class);
-        grid.setSizeFull();
-        gridLayout.setSpacing(false);
-        gridLayout.addComponent(grid);
-
-        grid.addItemClickListener(event -> {
-            if (event.getMouseEventDetails().isDoubleClick()) {
-                editElementDoubleClick(event.getItem().getId());
-            }
-        });
-
-        grid.addContextClickListener(event -> {
-            Notification.show(event.toString());
-        });
-    }
-
 
     @Override
     public void addElement() {
@@ -92,6 +58,12 @@ public class StudentsView extends AbstractListForm {
     }
 
     @Override
+    public void editElementDoubleClick(Long id) {
+        UI.getCurrent().getNavigator().navigateTo("student/id=" + id);
+        Page.getCurrent().reload();
+    }
+
+    @Override
     public void deleteElement() {
 
         ConfirmDialog.show(UI.getCurrent(),
@@ -106,6 +78,19 @@ public class StudentsView extends AbstractListForm {
                 });
     }
 
+    private void setContentGrid() {
+        List<Student> list = studentService.getAll();
+        grid.setItems(list);
+        grid.setColumnOrder("id",
+                "surname",
+                "name",
+                "patronymic",
+                "birthday",
+                "phone",
+                "photo",
+                "haveLicense");
+    }
+
     private void removeItem() {
         Long id = CommonMethods.getSelectedtRow(grid.getSelectedItems());
 
@@ -114,11 +99,5 @@ public class StudentsView extends AbstractListForm {
         }
         studentService.deleteByID(id);
         setContentGrid();
-    }
-
-    @Override
-    public void editElementDoubleClick(Long id) {
-        UI.getCurrent().getNavigator().navigateTo("student/id=" + id);
-        Page.getCurrent().reload();
     }
 }

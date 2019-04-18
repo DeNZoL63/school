@@ -22,7 +22,7 @@ abstract class PersonForm extends BasicWindowForm {
         birthdayField = new DateField(bundle.getString("BirthdayField"));
         birthdayField.setLocale(bundle.getLocale());
 
-        getMainBody().addComponents(
+        getFormLayout().addComponents(
                 surnameField,
                 nameField,
                 patronymicField,

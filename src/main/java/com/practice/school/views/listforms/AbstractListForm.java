@@ -1,6 +1,7 @@
 package com.practice.school.views.listforms;
 
 import com.practice.school.MainUI;
+import com.practice.school.entity.BaseEntity;
 import com.practice.school.interfaces.ListFormActions;
 import com.practice.school.views.elements.LocaleElement;
 import com.vaadin.event.ShortcutAction;
@@ -13,17 +14,65 @@ import java.util.ResourceBundle;
 
 @SpringView
 //@Component
-abstract class AbstractListForm<T> extends Composite implements ListFormActions, View {
+abstract class AbstractListForm<T extends BaseEntity> extends Composite implements ListFormActions, View {
 
     private VerticalLayout form = new VerticalLayout();
     private Label header = new Label();
-    private VerticalLayout gridLayout = new VerticalLayout();
+    private Grid<T> grid;
+    private final HorizontalLayout buttonsGroup;
+    private final HorizontalLayout buttonsLocale;
 
-    AbstractListForm() {
-
-        HorizontalLayout buttonsGroup = new HorizontalLayout();
+    AbstractListForm(Class<T> beanType) {
 
         ResourceBundle bundle = MainUI.getResourceBundle();
+
+        createGrid(beanType);
+        buttonsGroup = addButtons(bundle);
+        buttonsLocale = LocaleElement.getButtonsGroup();
+
+        form.addComponents(buttonsLocale, header, buttonsGroup, grid);
+        form.setDefaultComponentAlignment(Alignment.TOP_LEFT);
+        form.setComponentAlignment(buttonsLocale, Alignment.TOP_RIGHT);
+        form.setSizeFull();
+
+        initExpandRatio();
+    }
+
+    VerticalLayout getForm() {
+        return form;
+    }
+
+    void setHeaderTitle(String title) {
+        header.setValue(title);
+        header.setStyleName(ValoTheme.LABEL_H1);
+    }
+
+    Grid<T> getGrid() {
+        return grid;
+    }
+
+    private void initExpandRatio() {
+        form.setExpandRatio(buttonsLocale, 4f);
+        form.setExpandRatio(header, 12f);
+        form.setExpandRatio(buttonsGroup, 4f);
+        form.setExpandRatio(grid, 80f);
+    }
+
+    private void createGrid(Class<T> beanType) {
+        grid = new Grid<>(beanType);
+        grid.addItemClickListener(event -> {
+            if (event.getMouseEventDetails().isDoubleClick()) {
+                editElementDoubleClick(event.getItem().getId());
+            }
+        });
+        grid.addContextClickListener(event -> {
+            Notification.show(event.toString());
+        });
+        grid.setSizeFull();
+    }
+
+    private HorizontalLayout addButtons(ResourceBundle bundle) {
+        HorizontalLayout buttonsGroup = new HorizontalLayout();
 
         Button addButton = new Button(bundle.getString("AddKey"));
         Button editButton = new Button(bundle.getString("EditKey"));
@@ -49,31 +98,6 @@ abstract class AbstractListForm<T> extends Composite implements ListFormActions,
 
         buttonsGroup.addComponents(addButton, editButton, deleteButton);
         buttonsGroup.setSizeUndefined();
-
-        HorizontalLayout buttonsLocale = LocaleElement.getButtonsGroup();
-        form.addComponents(buttonsLocale, header, buttonsGroup, gridLayout);
-        form.setDefaultComponentAlignment(Alignment.TOP_LEFT);
-        form.setComponentAlignment(buttonsLocale, Alignment.TOP_RIGHT);
-
-        gridLayout.setSizeFull();
-        form.setSizeFull();
-
-        form.setExpandRatio(buttonsLocale, 4f);
-        form.setExpandRatio(header, 12f);
-        form.setExpandRatio(buttonsGroup, 4f);
-        form.setExpandRatio(gridLayout, 80f);
-    }
-
-    VerticalLayout getForm() {
-        return form;
-    }
-
-    VerticalLayout getGridLayout() {
-        return gridLayout;
-    }
-
-    void setHeaderTitle(String title) {
-        header.setValue(title);
-        header.setStyleName(ValoTheme.LABEL_H1);
+        return buttonsGroup;
     }
 }

@@ -29,7 +29,7 @@ public class PaymentView extends StudentActionForm {
     }
 
     private void fillForm() {
-        FormLayout formLayout = getMainBody();
+        FormLayout formLayout = getFormLayout();
 
         final TextField amountField = new TextField(bundle.getString("AmountField"));
 

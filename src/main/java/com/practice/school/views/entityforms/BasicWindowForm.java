@@ -16,7 +16,7 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
 
     private VerticalLayout form = new VerticalLayout();
     private Label header = new Label();
-    private VerticalLayout mainBody;
+    private HorizontalLayout mainBody;
     private final HorizontalLayout buttonsLocale;
     private final HorizontalLayout mainButtonsGroup;
     private FormLayout formLayout;
@@ -56,8 +56,12 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
         return form;
     }
 
-    FormLayout getMainBody() {
+    FormLayout getFormLayout() {
         return formLayout;
+    }
+
+    HorizontalLayout getMainBodi() {
+        return mainBody;
     }
 
     void setHeaderTitle(String title) {
@@ -102,7 +106,11 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
     }
 
     private void fillMainBody(){
-        mainBody = new VerticalLayout();
+//        mainBody = new VerticalLayout();
+        mainBody = new HorizontalLayout();
+//        mainBody.setSizeFull();
+        mainBody.setSizeUndefined();
+        mainBody.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
         formLayout = new FormLayout();
         formLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
@@ -113,6 +121,7 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
         formLayout.addComponent(idField);
 
         mainBody.addComponent(formLayout);
+//        mainBody.setExpandRatio(formLayout, 20);
         mainBody.setComponentAlignment(formLayout, Alignment.MIDDLE_CENTER);
     }
 
@@ -121,6 +130,7 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
         form.setComponentAlignment(buttonsLocale, Alignment.TOP_RIGHT);
         form.setComponentAlignment(header, Alignment.TOP_CENTER);
         form.setComponentAlignment(mainButtonsGroup, Alignment.TOP_CENTER);
+        form.setComponentAlignment(mainBody, Alignment.TOP_CENTER);
         form.setSizeFull();
     }
 

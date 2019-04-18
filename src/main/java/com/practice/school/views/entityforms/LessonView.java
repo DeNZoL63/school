@@ -22,7 +22,7 @@ public class LessonView extends StudentActionForm {
     }
 
     private void fillForm() {
-        FormLayout formLayout = getMainBody();
+        FormLayout formLayout = getFormLayout();
 
         final DateField timeField = new DateField(bundle.getString("TimeField"));
         final ComboBox<Teacher> teacherField = new ComboBox<>(bundle.getString("TeacherField"));

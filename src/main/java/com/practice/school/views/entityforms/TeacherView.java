@@ -23,7 +23,7 @@ public class TeacherView extends PersonForm {
     }
 
     private void fillForm() {
-        FormLayout formLayout = getMainBody();
+        FormLayout formLayout = getFormLayout();
 
         final TextField experienceField = new TextField(bundle.getString("ExperienceField"));
         final TextField licenseNumberField = new TextField(bundle.getString("LicenseNumberField"));

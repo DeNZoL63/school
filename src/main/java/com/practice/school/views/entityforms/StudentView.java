@@ -8,11 +8,16 @@ import com.vaadin.data.ValidationException;
 import com.vaadin.data.converter.StringToLongConverter;
 import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.FileResource;
+import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ResourceBundle;
 
 @UIScope
@@ -29,13 +34,13 @@ public class StudentView extends PersonForm {
     private DateField birthdayField = getBirthdayField();
     private TextField phoneField;
     private TextField photoField;
+    private Image photo2Field;
     private CheckBox haveLicenseField;
     private Binder<Student> binder = new Binder<>(Student.class);
     private Student student = new Student();
 
 
     public StudentView() {
-
         customForm();
         addPersonalElements();
         bindFields();
@@ -158,7 +163,7 @@ public class StudentView extends PersonForm {
     }
 
     private void addPersonalElements() {
-        FormLayout formLayout = getMainBody();
+        FormLayout formLayout = getFormLayout();
 
         phoneField = new TextField(bundle.getString("PhoneField"));
         phoneField.setMaxLength(12);
@@ -167,8 +172,64 @@ public class StudentView extends PersonForm {
 
         formLayout.addComponents(
                 phoneField,
-                photoField,
+//                photoField,
                 haveLicenseField);
+
+
+        // Image as a file resource
+        FileResource resource = new FileResource(new File("db_photos/"+"thousand_words_01.jpg"));
+        final VerticalLayout vL = new VerticalLayout();
+        photo2Field = new Image(bundle.getString("PhotoField"), resource);
+        photo2Field.setHeight("300px");
+        photo2Field.setWidth("300px");
+        vL.addComponent(photo2Field);
+
+
+
+        Upload upload = new Upload("", new Upload.Receiver() {
+            @Override
+            public OutputStream receiveUpload(String filename, String mimeType) {
+
+                // Create upload stream
+                OutputStream fos = null; // Stream to write to
+                try {
+                    // Open the file for writing.
+                    File file = new File("db_photos/"+ filename);
+                    fos = new FileOutputStream(file);
+                } catch (final java.io.FileNotFoundException e) {
+                    new Notification("Could not open file<br/>",
+                            e.getMessage(),
+                            Notification.Type.ERROR_MESSAGE)
+                            .show(Page.getCurrent());
+                    return null;
+                }
+                return fos; // Return the output stream to write to
+            }
+        });
+//        upload.setAcceptedFileTypes("image/jpeg", "image/png", "image/gif");
+
+        upload.addSucceededListener(event -> {
+//            Component component = createComponent(event.getMIMEType(),
+//                    event.getFilename(),
+//                    buffer.getInputStream(event.getFilename()));
+            photo2Field.setSource(new FileResource(new File("db_photos/" + event.getFilename())));
+        });
+
+        vL.addComponent(upload);
+
+
+
+        HorizontalLayout mb = getMainBodi();
+//        mb.addComponentAsFirst(photo2Field);
+        mb.addComponent(vL);
+//        mb.setComponentAlignment(photo2Field, Alignment.MIDDLE_RIGHT);
+        mb.setComponentAlignment(vL, Alignment.MIDDLE_RIGHT);
+        mb.setComponentAlignment(formLayout, Alignment.MIDDLE_LEFT);
+        mb.setSizeUndefined();
+//        formLayout.addComponent(photo2Field);
+
+//        final HorizontalLayout horizontalLayout = new HorizontalLayout();
+//        horizontalLayout.addComponents(formLayout, photo2Field);
     }
 
     private void customForm(){

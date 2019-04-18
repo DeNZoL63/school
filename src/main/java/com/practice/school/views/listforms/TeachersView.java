@@ -1,6 +1,7 @@
 package com.practice.school.views.listforms;
 
 import com.practice.school.MainUI;
+import com.practice.school.entity.Teacher;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
@@ -14,7 +15,7 @@ import java.util.ResourceBundle;
 public class TeachersView extends AbstractListForm {
 
     public TeachersView() {
-        super();
+        super(Teacher.class);
         VerticalLayout form = getForm();
 
         ResourceBundle bundle = MainUI.getResourceBundle();
