@@ -35,14 +35,56 @@ public class StudentView extends PersonForm {
 
 
     public StudentView() {
-        String patternChars = "^[a-zA-Zа-яА-Я]{2,50}$";
-
-        String patternNumbers = "^\\+[0-9]{11,11}$";
-        RegexpValidator validatorLetters = new RegexpValidator(bundle.getString("FieldCharsValidationError"), patternChars);
-        RegexpValidator validatorNumbers = new RegexpValidator(bundle.getString("FieldNumbersValidationError"), patternNumbers);
 
         customForm();
         addPersonalElements();
+        bindFields();
+
+        binder.bindInstanceFields(new Student());
+        binder.validate();
+    }
+
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+        String parameterID = event.getParameterMap().get("id");
+
+        if (parameterID == null || parameterID.equals("0")){
+            return;
+        }
+
+        this.student = studentService.findById(Long.valueOf(parameterID));
+
+        if (this.student == null){
+            return;
+        }
+        binder.setBean(this.student);
+        binder.validate();
+    }
+
+    @Override
+    public void okAction() {
+        validateAll();
+        if (createStudent()){
+            closeForm();
+        }
+    }
+
+    @Override
+    public void applyAction() {
+        validateAll();
+        createStudent();
+    }
+
+    @Override
+    public void cancelAction() {
+        closeForm();
+    }
+
+    private void bindFields() {
+        String patternChars = "^[a-zA-Zа-яА-Я]{2,50}$";
+        String patternNumbers = "^\\+[0-9]{11,11}$";
+        RegexpValidator validatorLetters = new RegexpValidator(bundle.getString("FieldCharsValidationError"), patternChars);
+        RegexpValidator validatorNumbers = new RegexpValidator(bundle.getString("FieldNumbersValidationError"), patternNumbers);
 
         binder.forField(idField)
                 .withConverter(new StringToLongConverter(bundle.getString("EnterNumberError")))
@@ -83,9 +125,6 @@ public class StudentView extends PersonForm {
         binder.bind(birthdayField, Student::getBirthday, Student::setBirthday);
         binder.bind(photoField, Student::getPhoto, Student::setPhoto);
         binder.bind(haveLicenseField, Student::getHaveLicense, Student::setHaveLicense);
-
-        binder.bindInstanceFields(new Student());
-        binder.validate();
     }
 
     private static boolean checkLengthMoreTwo(String s) {
@@ -96,44 +135,8 @@ public class StudentView extends PersonForm {
         return s.length() > 0;
     }
 
-    @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event) {
-        String parameterID = event.getParameterMap().get("id");
-
-        if (parameterID == null || parameterID.equals("0")){
-            return;
-        }
-
-        this.student = studentService.findById(Long.valueOf(parameterID));
-
-        if (this.student == null){
-            return;
-        }
-        binder.setBean(this.student);
-        binder.validate();
-    }
-
-    @Override
-    public void okAction() {
-        validateAll();
-        if (createStudent()){
-            closeForm();
-        }
-    }
-
-    @Override
-    public void applyAction() {
-        validateAll();
-        createStudent();
-    }
-
-    @Override
-    public void cancelAction() {
-        closeForm();
-    }
-
     private Boolean createStudent() {
-        Boolean result = false;
+        boolean result = false;
         try {
             if (binder.isValid()) {
                 binder.writeBean(this.student);
