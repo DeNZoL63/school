@@ -1,10 +1,12 @@
 package com.practice.school.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
-@Table(name = "Teachers")
+@Entity
+@Table(name = "Teacher")
 public class Teacher extends Person {
 
     @Column

@@ -40,7 +40,8 @@ public class StudentView extends PersonForm {
     private Binder<Student> binder = new Binder<>(Student.class);
     private Student student = new Student();
     private String pathPhoto = "src/main/resources/static/db_photos/";
-    private File photoFile = new File(pathPhoto + "notfound.jpg");
+    private File photoNotFoundFile = new File(pathPhoto + "notfound.jpg");
+    private File photoFile = new File(pathPhoto + student.getId() + "_student.jpg");
 
 
     public StudentView() {
@@ -56,7 +57,7 @@ public class StudentView extends PersonForm {
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         String parameterID = event.getParameterMap().get("id");
 
-        photoImage.setSource(new FileResource(photoFile));
+        photoImage.setSource(new FileResource(photoNotFoundFile));
         photoImage.setHeight("300px");
         photoImage.setWidth("300px");
 
@@ -73,10 +74,11 @@ public class StudentView extends PersonForm {
 
         photoFile = new File(student.getPhoto());
 
-        if (!photoFile.exists()) {
-            photoFile = new File(pathPhoto + "notfound.jpg");
+        if (photoFile.exists()) {
+//            photoFile = new File(pathPhoto + "notfound.jpg");
+            photoImage.setSource(new FileResource(photoFile));
         }
-        photoImage.setSource(new FileResource(photoFile));
+//        photoImage.setSource(new FileResource(photoFile));
 
         binder.validate();
     }
@@ -218,31 +220,54 @@ public class StudentView extends PersonForm {
                     new Notification("ВНИМАНИЕ",
                             "Сначала сохраните элемент",
                             Notification.Type.WARNING_MESSAGE).show(Page.getCurrent());
-                    nameOfFile = pathPhoto + "notfound.jpg";
+                    nameOfFile = pathPhoto + "tmp.jpg";
+
+                    throw new Exception();
 //                    return null;
                 }else{
                     nameOfFile = pathPhoto + student.getId() + "_student.jpg";
                 }
                 photoFile = new File(nameOfFile);
+                if (photoFile.exists()){
+                    photoFile.delete();
+                    photoFile = new File(nameOfFile);
+                }
                 fos = new FileOutputStream(photoFile);
             } catch (final FileNotFoundException e) {
                 new Notification("Could not open file<br/>",
                         e.getMessage(),
                         Notification.Type.ERROR_MESSAGE)
                         .show(Page.getCurrent());
-                nameOfFile = pathPhoto + "notfound.jpg";
-                photoFile = new File(nameOfFile);
+//                nameOfFile = pathPhoto + "notfound.jpg";
+//                photoFile = new File(nameOfFile);
 //                return null;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return fos; // Return the output stream to write to
         });
 
+        upload.addFinishedListener(event -> {
+            photoImage.setSource(new FileResource(photoFile));
+        });
+
+        upload.addFailedListener(event -> {
+//            photoFile = new File(pathPhoto + "notfound.jpg");
+            photoImage.setSource(new FileResource(photoNotFoundFile));
+            student.setPhoto(photoFile.getPath());
+            photoField.setValue(photoFile.getPath());
+        });
+
         upload.addSucceededListener(event -> {
             if (photoFile == null) {
-                photoFile = new File(pathPhoto + "notfound.jpg");
+//                photoFile = new File(pathPhoto + "notfound.jpg");
+//                photoImage.setSource(new FileResource(photoFile));
+                photoImage.setSource(new FileResource(photoNotFoundFile));
+            }else {
+//                photoImage.setSource(new FileResource(photoFile));
+                photoImage.setSource(new FileResource(photoFile));
             }
-
-            photoImage = new Image(bundle.getString("PhotoField"), new FileResource(photoFile));
+//            photoImage.setSource(null);
             student.setPhoto(photoFile.getPath());
             photoField.setValue(photoFile.getPath());
         });

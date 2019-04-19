@@ -2,9 +2,11 @@ package com.practice.school.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.Date;
 
-@Table(name = "Exams")
+@Table(name = "Exam")
 public class Exam extends StudentAction{
 
     @Column
@@ -15,6 +17,8 @@ public class Exam extends StudentAction{
 
     @Column(length = 1)
     //#TODO ограничить оценку
+    @Min(1)
+    @Max(5)
     private Byte mark;
 
     public Exam() {

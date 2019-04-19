@@ -4,7 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Table;
 import java.util.Date;
 
-@Table(name = "Payments")
+@Table(name = "Payment")
 public class Payment extends StudentAction {
 
     @Column

@@ -5,7 +5,6 @@ import com.practice.school.views.LogonView;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.PushStateNavigation;
 import com.vaadin.navigator.View;
-import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.annotation.SpringView;
@@ -33,14 +32,22 @@ public class MainUI extends UI implements View {
 
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle("bundle", localeRU);
 
-     //#TODO нормальные куки заиплить
+    //#TODO нормальные куки заиплить
     private static boolean user = false;
 
-    private HorizontalLayout mainLayout;
+    private GridLayout mainLayout;
     private CssLayout viewContainer = new CssLayout();
 
     @Autowired
     private SpringViewProvider viewProvider;
+
+    @Override
+    protected void init(VaadinRequest vaadinRequest) {
+        initNavigator();
+        setupLayout();
+        addMenu();
+        CommonMethods.checkUser();
+    }
 
     public static boolean isUser() {
         return user;
@@ -62,16 +69,12 @@ public class MainUI extends UI implements View {
         return resourceBundle;
     }
 
-    @Override
-    protected void init(VaadinRequest vaadinRequest) {
-        initNavigator();
-        setupLayout();
-        addMenu();
-        CommonMethods.checkUser();
+    public void setViewProvider(SpringViewProvider viewProvider) {
+        this.viewProvider = viewProvider;
     }
 
     private void setupLayout() {
-        mainLayout = new HorizontalLayout();
+        mainLayout = new GridLayout(2, 1);
         viewContainer.setSizeFull();
 
         setContent(mainLayout);
@@ -80,20 +83,19 @@ public class MainUI extends UI implements View {
     private void addMenu() {
 
         CssLayout menu = getMenu();
-        Page currentPage = Page.getCurrent();
 
         Panel panel = new Panel();
         panel.setContent(menu);
-        panel.setHeight((currentPage.getBrowserWindowHeight() - 1) + "px");
+        panel.setWidthUndefined();
+        panel.setHeight("100%");
 
-        mainLayout.addComponents(panel, viewContainer);
-        panel.setWidth("148px");
-        mainLayout.setWidth((currentPage.getBrowserWindowWidth() - panel.getWidth()) + "px");
+        mainLayout.addComponent(panel, 0, 0);
+        mainLayout.addComponent(viewContainer, 1, 0);
+        mainLayout.setColumnExpandRatio(0, 1);
+        mainLayout.setColumnExpandRatio(1, 99);
+
+        mainLayout.setSpacing(false);
         mainLayout.setSizeFull();
-
-        float panelSize = panel.getWidth() / currentPage.getBrowserWindowWidth();
-        mainLayout.setExpandRatio(panel, panelSize);
-        mainLayout.setExpandRatio(viewContainer, 1f - panelSize);
     }
 
     private void initNavigator() {
@@ -150,12 +152,7 @@ public class MainUI extends UI implements View {
 
         menu.addStyleName("my-menu-style");
         exit.addStyleName("my-menu-styles");
-        menu.setWidth("145px");
 
         return menu;
-    }
-
-    public void setViewProvider(SpringViewProvider viewProvider) {
-        this.viewProvider = viewProvider;
     }
 }

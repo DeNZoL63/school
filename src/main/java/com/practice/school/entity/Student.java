@@ -6,7 +6,7 @@ import javax.persistence.Table;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "STUDENTS")
+@Table(name = "Student")
 public class Student extends Person {
 
     @Column(length = 12)

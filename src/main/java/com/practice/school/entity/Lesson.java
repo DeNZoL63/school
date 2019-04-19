@@ -5,7 +5,7 @@ import javax.persistence.Table;
 import java.sql.Time;
 import java.util.Date;
 
-@Table(name = "Lessons")
+@Table(name = "Lesson")
 public class Lesson extends StudentAction {
 
     @Column
