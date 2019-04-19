@@ -18,6 +18,8 @@ abstract class AbstractListForm<T extends BaseEntity> extends Composite implemen
     private GridLayout form = new GridLayout(2, 3);
     private Label header = new Label();
     private Grid<T> grid;
+    private Button editButton;
+    private Button deleteButton;
 
     AbstractListForm(Class<T> beanType) {
 
@@ -67,7 +69,12 @@ abstract class AbstractListForm<T extends BaseEntity> extends Composite implemen
                 editElementDoubleClick(event.getItem().getId());
             }
         });
-        grid.addContextClickListener(event -> Notification.show(event.toString()));
+        grid.addSelectionListener(event -> {
+            boolean flag = event.getFirstSelectedItem().isPresent();
+            editButton.setEnabled(flag);
+            deleteButton.setEnabled(flag);
+        });
+//        grid.addContextClickListener(event -> Notification.show(event.toString()));
         grid.setSizeFull();
     }
 
@@ -75,8 +82,8 @@ abstract class AbstractListForm<T extends BaseEntity> extends Composite implemen
         HorizontalLayout buttonsGroup = new HorizontalLayout();
 
         Button addButton = new Button(bundle.getString("AddKey"));
-        Button editButton = new Button(bundle.getString("EditKey"));
-        Button deleteButton = new Button(bundle.getString("DeleteKey"));
+        editButton = new Button(bundle.getString("EditKey"));
+        deleteButton = new Button(bundle.getString("DeleteKey"));
 
         addButton.setStyleName(ValoTheme.BUTTON_TINY);
         addButton.addClickListener((Button.ClickListener) clickEvent -> addElement());
@@ -89,12 +96,14 @@ abstract class AbstractListForm<T extends BaseEntity> extends Composite implemen
         editButton.setClickShortcut(ShortcutAction.KeyCode.F2);
         editButton.setDescription(bundle.getString("EditKeyDescription"));
         editButton.setId("editButton");
+        editButton.setEnabled(false);
 
         deleteButton.setStyleName(ValoTheme.BUTTON_TINY);
         deleteButton.addClickListener((Button.ClickListener) clickEvent -> deleteElement());
         deleteButton.setClickShortcut(ShortcutAction.KeyCode.DELETE);
         deleteButton.setDescription(bundle.getString("DeleteKeyDescription"));
         deleteButton.setId("deleteButton");
+        deleteButton.setEnabled(false);
 
         buttonsGroup.addComponents(addButton, editButton, deleteButton);
         buttonsGroup.setSizeUndefined();

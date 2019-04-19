@@ -30,7 +30,8 @@ public class LocaleElement {
 
         buttonsGroup.addComponents(ru, en);
         buttonsGroup.setDefaultComponentAlignment(Alignment.TOP_RIGHT);
-        buttonsGroup.setSizeUndefined();
+        buttonsGroup.setWidthUndefined();
+        buttonsGroup.setHeight("100%");
 
         return buttonsGroup;
     }

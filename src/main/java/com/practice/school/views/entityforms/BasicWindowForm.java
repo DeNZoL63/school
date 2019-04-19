@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
 
 abstract class BasicWindowForm extends Window implements View, OkCancelActions, ApplyAction {
 
-    private VerticalLayout form = new VerticalLayout();
+    private GridLayout form = new GridLayout(2, 4);
     private Label header = new Label();
     private HorizontalLayout mainBody;
     private final HorizontalLayout buttonsLocale;
@@ -23,10 +23,15 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
     private TextField idField;
 
     public BasicWindowForm() {
-        setWindowMode(WindowMode.MAXIMIZED);
+        setWindowMode(WindowMode.NORMAL);
         this.setModal(true);
-        setClosable(false);
-        setResizable(false);
+        this.setWidth("50%");
+        this.setHeight("100%");
+        this.setModal(true);
+        this.addCloseListener(e -> cancelAction());
+
+        setClosable(true);
+        setResizable(true);
 
         UI.getCurrent().addWindow(this);
 
@@ -36,11 +41,10 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
 
         buttonsLocale = LocaleElement.getButtonsGroup();
 
-        form.addComponents(
-                buttonsLocale,
-                header,
-                mainBody,
-                mainButtonsGroup);
+        form.addComponent(header, 0, 1);
+        form.addComponent(buttonsLocale, 1, 1);
+        form.addComponent(mainBody, 0, 2, 1, 2);
+        form.addComponent(mainButtonsGroup, 0, 3, 1, 3);
 
         setFormAligment();
         setRatio();
@@ -49,10 +53,10 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
 
     @Override
     public Component getViewComponent() {
-        return new VerticalLayout();
+        return form;
     }
 
-    public VerticalLayout getForm() {
+    public GridLayout getForm() {
         return form;
     }
 
@@ -97,7 +101,8 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
         cancelButton.setId("cancelButton");
 
         buttonsGroup.addComponents(okButton, applyButton, cancelButton);
-        buttonsGroup.setSizeUndefined();
+        buttonsGroup.setWidthUndefined();
+        buttonsGroup.setHeight("100%");
         return buttonsGroup;
     }
 
@@ -106,38 +111,42 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
     }
 
     private void fillMainBody(){
-//        mainBody = new VerticalLayout();
         mainBody = new HorizontalLayout();
-//        mainBody.setSizeFull();
-        mainBody.setSizeUndefined();
+        mainBody.setWidthUndefined();
+        mainBody.setHeight("100%");
         mainBody.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
         formLayout = new FormLayout();
         formLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-        formLayout.setSizeUndefined();
+        formLayout.setWidthUndefined();
+        formLayout.setHeight("100%");
 
         idField = new TextField("ID");
         idField.setEnabled(false);
         formLayout.addComponent(idField);
 
         mainBody.addComponent(formLayout);
-//        mainBody.setExpandRatio(formLayout, 20);
         mainBody.setComponentAlignment(formLayout, Alignment.MIDDLE_CENTER);
     }
 
     private void setFormAligment() {
         form.setDefaultComponentAlignment(Alignment.TOP_CENTER);
         form.setComponentAlignment(buttonsLocale, Alignment.TOP_RIGHT);
-        form.setComponentAlignment(header, Alignment.TOP_CENTER);
+        form.setComponentAlignment(header, Alignment.TOP_RIGHT);
         form.setComponentAlignment(mainButtonsGroup, Alignment.TOP_CENTER);
         form.setComponentAlignment(mainBody, Alignment.TOP_CENTER);
         form.setSizeFull();
     }
 
     private void setRatio() {
-        form.setExpandRatio(buttonsLocale, 4f);
-        form.setExpandRatio(header, 12f);
-        form.setExpandRatio(mainBody, 80f);
-        form.setExpandRatio(mainButtonsGroup, 4f);
+        form.setRowExpandRatio(0, 5);
+        form.setRowExpandRatio(1, 10);
+        form.setRowExpandRatio(2, 75);
+        form.setRowExpandRatio(3, 10);
+
+        form.setColumnExpandRatio(0, 50);
+        form.setColumnExpandRatio(1, 50);
+        form.setComponentAlignment(buttonsLocale, Alignment.BOTTOM_RIGHT);
     }
+
 }

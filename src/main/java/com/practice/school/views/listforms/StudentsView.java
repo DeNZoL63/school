@@ -4,7 +4,6 @@ import com.practice.school.MainUI;
 import com.practice.school.entity.Student;
 import com.practice.school.interfaces.CommonMethods;
 import com.practice.school.service.impl.StudentServiceImpl;
-import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Grid;
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.dialogs.ConfirmDialog;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 @UIScope
@@ -44,24 +44,19 @@ public class StudentsView extends AbstractListForm<Student> {
     @Override
     public void addElement() {
         UI.getCurrent().getNavigator().navigateTo("student");
-        Page.getCurrent().reload();
     }
 
     @Override
     public void editElement() {
-        Long id = CommonMethods.getSelectedtRow(grid.getSelectedItems());
 
-        if (id == null || id.equals(0L)) {
-            return;
-        }
-        UI.getCurrent().getNavigator().navigateTo("student/id=" + id);
-        Page.getCurrent().reload();
+        final Optional<Student> item = grid.getSelectionModel().getFirstSelectedItem();
+
+        item.ifPresent(student -> UI.getCurrent().getNavigator().navigateTo("student/id=" + student.getId()));
     }
 
     @Override
     public void editElementDoubleClick(Long id) {
         UI.getCurrent().getNavigator().navigateTo("student/id=" + id);
-        Page.getCurrent().reload();
     }
 
     @Override

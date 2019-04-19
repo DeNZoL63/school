@@ -3,6 +3,7 @@ package com.practice.school.views.entityforms;
 import com.practice.school.MainUI;
 import com.practice.school.entity.Student;
 import com.practice.school.service.impl.StudentServiceImpl;
+import com.practice.school.views.listforms.StudentsView;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.converter.StringToLongConverter;
@@ -11,7 +12,6 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,12 +21,14 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ResourceBundle;
 
-@UIScope
+//@UIScope
 @SpringView(name = "student")
 public class StudentView extends PersonForm {
 
     @Autowired
     private StudentServiceImpl studentService;
+    @Autowired
+    private StudentsView studentsView;
     private ResourceBundle bundle = MainUI.getResourceBundle();
     private TextField idField = getIdField();
     private TextField nameField = getNameField();
@@ -44,6 +46,11 @@ public class StudentView extends PersonForm {
     private File photoFile = new File(pathPhoto + student.getId() + "_student.jpg");
 
 
+    @Override
+    public Component getViewComponent() {
+        return studentsView;
+    }
+
     public StudentView() {
         customForm();
         addPersonalElements();
@@ -58,8 +65,6 @@ public class StudentView extends PersonForm {
         String parameterID = event.getParameterMap().get("id");
 
         photoImage.setSource(new FileResource(photoNotFoundFile));
-        photoImage.setHeight("300px");
-        photoImage.setWidth("300px");
 
         if (parameterID == null || parameterID.equals("0")){
             return;
@@ -75,10 +80,8 @@ public class StudentView extends PersonForm {
         photoFile = new File(student.getPhoto());
 
         if (photoFile.exists()) {
-//            photoFile = new File(pathPhoto + "notfound.jpg");
             photoImage.setSource(new FileResource(photoFile));
         }
-//        photoImage.setSource(new FileResource(photoFile));
 
         binder.validate();
     }
@@ -191,21 +194,28 @@ public class StudentView extends PersonForm {
                 phoneField,
                 haveLicenseField);
 
-
-        final VerticalLayout photoPlusForm = new VerticalLayout();
+        final GridLayout photoPlusForm = new GridLayout(1,2);
         photoImage = new Image(bundle.getString("PhotoField"));
 
-        photoPlusForm.addComponent(photoImage);
+        photoPlusForm.addComponent(photoImage, 0, 1);
 
         Upload upload = createUpload();
 
-        photoPlusForm.addComponent(upload);
+        photoPlusForm.addComponent(upload, 0, 0);
+        photoPlusForm.setWidthUndefined();
+        photoPlusForm.setHeight("100%");
+        photoPlusForm.setComponentAlignment(photoImage, Alignment.TOP_CENTER);
+        photoPlusForm.setComponentAlignment(upload, Alignment.TOP_LEFT);
+        photoPlusForm.setRowExpandRatio(0,5);
+        photoPlusForm.setRowExpandRatio(1,95);
 
         HorizontalLayout mb = getMainBodi();
         mb.addComponent(photoPlusForm);
-        mb.setComponentAlignment(photoPlusForm, Alignment.MIDDLE_RIGHT);
+        mb.setComponentAlignment(photoPlusForm, Alignment.TOP_LEFT);
         mb.setComponentAlignment(formLayout, Alignment.MIDDLE_LEFT);
-        mb.setSizeUndefined();
+
+        mb.setExpandRatio(photoPlusForm, 10);
+        mb.setExpandRatio(formLayout, 90);
     }
 
     private Upload createUpload() {
@@ -238,9 +248,6 @@ public class StudentView extends PersonForm {
                         e.getMessage(),
                         Notification.Type.ERROR_MESSAGE)
                         .show(Page.getCurrent());
-//                nameOfFile = pathPhoto + "notfound.jpg";
-//                photoFile = new File(nameOfFile);
-//                return null;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -252,7 +259,6 @@ public class StudentView extends PersonForm {
         });
 
         upload.addFailedListener(event -> {
-//            photoFile = new File(pathPhoto + "notfound.jpg");
             photoImage.setSource(new FileResource(photoNotFoundFile));
             student.setPhoto(photoFile.getPath());
             photoField.setValue(photoFile.getPath());
@@ -260,14 +266,10 @@ public class StudentView extends PersonForm {
 
         upload.addSucceededListener(event -> {
             if (photoFile == null) {
-//                photoFile = new File(pathPhoto + "notfound.jpg");
-//                photoImage.setSource(new FileResource(photoFile));
                 photoImage.setSource(new FileResource(photoNotFoundFile));
             }else {
-//                photoImage.setSource(new FileResource(photoFile));
                 photoImage.setSource(new FileResource(photoFile));
             }
-//            photoImage.setSource(null);
             student.setPhoto(photoFile.getPath());
             photoField.setValue(photoFile.getPath());
         });
