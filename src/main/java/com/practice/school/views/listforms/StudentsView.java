@@ -8,8 +8,8 @@ import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.dialogs.ConfirmDialog;
 
@@ -28,7 +28,8 @@ public class StudentsView extends AbstractListForm<Student> {
     public StudentsView(StudentServiceImpl studentService) {
         super(Student.class);
         this.studentService = studentService;
-        VerticalLayout form = getForm();
+//        VerticalLayout form = getForm();
+        final GridLayout form = getForm();
 
         bundle = MainUI.getResourceBundle();
         String headerText = bundle.getString("StudentsHeaderText");

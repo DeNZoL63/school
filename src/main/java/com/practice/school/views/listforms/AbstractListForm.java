@@ -13,38 +13,39 @@ import com.vaadin.ui.themes.ValoTheme;
 import java.util.ResourceBundle;
 
 @SpringView
-//@Component
 abstract class AbstractListForm<T extends BaseEntity> extends Composite implements ListFormActions, View {
 
-    private VerticalLayout form = new VerticalLayout();
+    private GridLayout form = new GridLayout(2, 3);
     private Label header = new Label();
     private Grid<T> grid;
-    private final HorizontalLayout buttonsGroup;
-    private final HorizontalLayout buttonsLocale;
 
     AbstractListForm(Class<T> beanType) {
 
         ResourceBundle bundle = MainUI.getResourceBundle();
 
         createGrid(beanType);
-        buttonsGroup = addButtons(bundle);
-        buttonsLocale = LocaleElement.getButtonsGroup();
+        HorizontalLayout buttonsGroup = addButtons(bundle);
+        HorizontalLayout buttonsLocale = LocaleElement.getButtonsGroup();
+        buttonsLocale.setSizeUndefined();
 
-        form.addComponents(buttonsLocale, header, buttonsGroup, grid);
-        form.setDefaultComponentAlignment(Alignment.TOP_LEFT);
-        form.setComponentAlignment(buttonsLocale, Alignment.TOP_RIGHT);
+        form.addComponent(header, 0, 0);
+        form.addComponent(buttonsLocale, 1, 0);
+        form.addComponent(buttonsGroup, 0, 1, 1, 1);
+        form.addComponent(grid, 0, 2, 1, 2);
+
         form.setSizeFull();
 
         initExpandRatio();
     }
 
-    VerticalLayout getForm() {
+    GridLayout getForm() {
         return form;
     }
 
     void setHeaderTitle(String title) {
         header.setValue(title);
         header.setStyleName(ValoTheme.LABEL_H1);
+        header.setSizeUndefined();
     }
 
     Grid<T> getGrid() {
@@ -52,10 +53,11 @@ abstract class AbstractListForm<T extends BaseEntity> extends Composite implemen
     }
 
     private void initExpandRatio() {
-        form.setExpandRatio(buttonsLocale, 4f);
-        form.setExpandRatio(header, 12f);
-        form.setExpandRatio(buttonsGroup, 4f);
-        form.setExpandRatio(grid, 80f);
+        form.setColumnExpandRatio(0, 99);
+        form.setColumnExpandRatio(1, 1);
+        form.setRowExpandRatio(0, 1);
+        form.setRowExpandRatio(1, 1);
+        form.setRowExpandRatio(2, 98);
     }
 
     private void createGrid(Class<T> beanType) {
@@ -65,9 +67,7 @@ abstract class AbstractListForm<T extends BaseEntity> extends Composite implemen
                 editElementDoubleClick(event.getItem().getId());
             }
         });
-        grid.addContextClickListener(event -> {
-            Notification.show(event.toString());
-        });
+        grid.addContextClickListener(event -> Notification.show(event.toString()));
         grid.setSizeFull();
     }
 

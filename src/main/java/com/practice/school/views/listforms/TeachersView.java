@@ -5,8 +5,8 @@ import com.practice.school.entity.Teacher;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 
 import java.util.ResourceBundle;
 
@@ -16,7 +16,8 @@ public class TeachersView extends AbstractListForm {
 
     public TeachersView() {
         super(Teacher.class);
-        VerticalLayout form = getForm();
+//        VerticalLayout form = getForm();
+        final GridLayout form = getForm();
 
         ResourceBundle bundle = MainUI.getResourceBundle();
         String headerText = bundle.getString("TeachersHeaderText");
