@@ -20,12 +20,12 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Teacher addTeacher(Teacher teacher) {
-        return null;
+        return teacherRepository.saveAndFlush(teacher);
     }
 
     @Override
     public Teacher editTeacher(Teacher teacher) {
-        return null;
+        return teacherRepository.saveAndFlush(teacher);
     }
 
     @Override
@@ -35,9 +35,9 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public void deleteByID(Long id) {
-        boolean studentExist = teacherRepository.existsById(id);
+        boolean teacherExist = teacherRepository.existsById(id);
 
-        if (studentExist){
+        if (teacherExist){
             teacherRepository.deleteById(id);
         }
     }

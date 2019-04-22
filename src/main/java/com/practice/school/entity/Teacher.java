@@ -10,9 +10,9 @@ import java.time.LocalDate;
 public class Teacher extends Person {
 
     @Column
-    private int experience;
+    private String experience;
 
-    @Column(unique = true)
+    @Column(length = 6, unique = true)
     private String licenseNumber;
 
     public Teacher() {
@@ -22,23 +22,23 @@ public class Teacher extends Person {
         super(id);
     }
 
-    public Teacher(long id, String surname, String name, String patronymic, LocalDate birthday, int experience, String licenseNumber) {
+    public Teacher(long id, String surname, String name, String patronymic, LocalDate birthday, String experience, String licenseNumber) {
         super(id, surname, name, patronymic, birthday);
         this.experience = experience;
         this.licenseNumber = licenseNumber;
     }
 
-    public Teacher(String surname, String name, String patronymic, LocalDate birthday, int experience, String licenseNumber) {
+    public Teacher(String surname, String name, String patronymic, LocalDate birthday, String experience, String licenseNumber) {
         super(surname, name, patronymic, birthday);
         this.experience = experience;
         this.licenseNumber = licenseNumber;
     }
 
-    public int getExperience() {
+    public String getExperience() {
         return experience;
     }
 
-    public void setExperience(int experience) {
+    public void setExperience(String experience) {
         this.experience = experience;
     }
 

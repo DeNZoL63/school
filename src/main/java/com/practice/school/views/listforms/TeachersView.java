@@ -27,7 +27,6 @@ public class TeachersView extends AbstractListForm {
 
     public TeachersView(TeacherServiceImpl teacherService) {
         super(Teacher.class);
-//        VerticalLayout form = getForm();
         final GridLayout form = getForm();
         this.teacherService = teacherService;
         bundle = MainUI.getResourceBundle();
@@ -46,8 +45,6 @@ public class TeachersView extends AbstractListForm {
     @Override
     public void addElement() {
         UI.getCurrent().getNavigator().navigateTo("teacher");
-//        Page.getCurrent().reload();
-//        new TeacherView();
     }
 
     @Override
@@ -55,10 +52,6 @@ public class TeachersView extends AbstractListForm {
         final Optional<Teacher> item = grid.getSelectionModel().getFirstSelectedItem();
 
         item.ifPresent(teacher -> UI.getCurrent().getNavigator().navigateTo("teacher/id=" + teacher.getId()));
-
-//        UI.getCurrent().getNavigator().navigateTo("teacher");
-//        Page.getCurrent().reload();
-//        new TeacherView();
     }
 
     @Override
@@ -89,7 +82,7 @@ public class TeachersView extends AbstractListForm {
         });
     }
 
-    private void setContentGrid() {
+    public void setContentGrid() {
         List<Teacher> list = teacherService.getAll();
         grid.setItems(list);
         grid.setColumnOrder("id",
