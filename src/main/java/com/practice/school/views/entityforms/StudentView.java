@@ -283,6 +283,7 @@ public class StudentView extends PersonForm {
 
     private void closeForm() {
         close();
+        studentsView.setContentGrid();
         MainUI.getCurrent().getNavigator().navigateTo("students");
     }
 }

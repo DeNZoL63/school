@@ -2,7 +2,6 @@ package com.practice.school.views.listforms;
 
 import com.practice.school.MainUI;
 import com.practice.school.entity.Student;
-import com.practice.school.interfaces.CommonMethods;
 import com.practice.school.service.impl.StudentServiceImpl;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
@@ -74,7 +73,7 @@ public class StudentsView extends AbstractListForm<Student> {
                 });
     }
 
-    private void setContentGrid() {
+    public void setContentGrid() {
         List<Student> list = studentService.getAll();
         grid.setItems(list);
         grid.setColumnOrder("id",
@@ -88,12 +87,9 @@ public class StudentsView extends AbstractListForm<Student> {
     }
 
     private void removeItem() {
-        Long id = CommonMethods.getSelectedtRow(grid.getSelectedItems());
+        final Optional<Student> item = grid.getSelectionModel().getFirstSelectedItem();
 
-        if (id == null) {
-            return;
-        }
-        studentService.deleteByID(id);
+        studentService.deleteByID(item.get().getId());
         setContentGrid();
     }
 }
