@@ -14,7 +14,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import java.util.ResourceBundle;
 
 @UIScope
-@SpringView(name = "logon")
+@SpringView(name = "login")
 public class LogonView extends Window implements View, OkCancelActions {
 
     private VerticalLayout mainLayout;
@@ -40,8 +40,8 @@ public class LogonView extends Window implements View, OkCancelActions {
         this.setModal(true);
         setClosable(false);
         setResizable(false);
-
         UI.getCurrent().addWindow(this);
+
         ResourceBundle bundle = MainUI.getResourceBundle();
         UI.getCurrent().getPage().setTitle(bundle.getString("AuthorizationHeaderText"));
     }
@@ -92,8 +92,7 @@ public class LogonView extends Window implements View, OkCancelActions {
 
     @Override
     public void okAction() {
-        //TO DO
-        //проверка корректности логина и пароля
+        //#TODO проверка корректности логина и пароля
         Notification.show("Нажали ВХОД");
 
         MainUI.setUser(true);

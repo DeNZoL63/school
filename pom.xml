@@ -85,7 +85,8 @@
             <artifactId>vaadin-upload-flow</artifactId>
             <version>1.3.0</version>
         </dependency>
-    </dependencies>
+
+	</dependencies>
 
 	<dependencyManagement>
 		<dependencies>
