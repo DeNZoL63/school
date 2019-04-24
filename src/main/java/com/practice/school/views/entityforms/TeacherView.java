@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ResourceBundle;
 
-//@UIScope
 @SpringView(name = "teacher")
 public class TeacherView extends PersonForm {
 

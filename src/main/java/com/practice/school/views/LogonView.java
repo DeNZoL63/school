@@ -3,9 +3,8 @@ package com.practice.school.views;
 import com.practice.school.MainUI;
 import com.practice.school.interfaces.OkCancelActions;
 import com.practice.school.views.elements.LocaleElement;
-import com.vaadin.navigator.Navigator;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
-import com.vaadin.shared.ui.window.WindowMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
@@ -15,35 +14,29 @@ import java.util.ResourceBundle;
 
 @UIScope
 @SpringView(name = "login")
-public class LogonView extends Window implements View, OkCancelActions {
+public class LogonView extends VerticalLayout implements View, OkCancelActions{
 
     private VerticalLayout mainLayout;
     private ResourceBundle resourceBundle;
+    private LoginCallback callback;
+    private TextField login;
+    private PasswordField password;
 
-    public LogonView() {
+    public LogonView(LoginCallback callback) {
+        this.callback = callback;
         init();
     }
 
-    @Override
-    public Component getViewComponent() {
-        return new VerticalLayout();
-    }
-
     private void init() {
-
         resourceBundle = MainUI.getResourceBundle();
 
         setupLayout();
         createForm();
 
-        setWindowMode(WindowMode.MAXIMIZED);
-        this.setModal(true);
-        setClosable(false);
-        setResizable(false);
-        UI.getCurrent().addWindow(this);
-
         ResourceBundle bundle = MainUI.getResourceBundle();
         UI.getCurrent().getPage().setTitle(bundle.getString("AuthorizationHeaderText"));
+
+        addComponent(mainLayout);
     }
 
     private void setupLayout() {
@@ -52,25 +45,22 @@ public class LogonView extends Window implements View, OkCancelActions {
         mainLayout.addComponent(buttonsLocale);
         mainLayout.setExpandRatio(buttonsLocale, 0.05f);
         mainLayout.setComponentAlignment(buttonsLocale, Alignment.TOP_RIGHT);
-
-        setContent(mainLayout);
     }
 
     private void createForm() {
-
-        TextField login = new TextField(resourceBundle.getString("UsernameField"));
+        login = new TextField(resourceBundle.getString("UsernameField"));
         login.setWidth("300px");
-        PasswordField password = new PasswordField(resourceBundle.getString("PasswordField"));
+        password = new PasswordField(resourceBundle.getString("PasswordField"));
         password.setWidth("300px");
 
         Button signInButton = new Button(resourceBundle.getString("EnterKey"));
         Button cancelButton = new Button(resourceBundle.getString("CancelKey"));
 
         signInButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
-        signInButton.addClickListener((Button.ClickListener) clickEvent -> okAction());
+        signInButton.addClickListener(event -> okAction());
+        signInButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         signInButton.setId("okButton");
 
-        cancelButton.addClickListener((Button.ClickListener) clickEvent -> cancelAction());
         cancelButton.setId("cancelButton");
         cancelButton.setStyleName(ValoTheme.BUTTON_QUIET);
 
@@ -90,26 +80,25 @@ public class LogonView extends Window implements View, OkCancelActions {
         mainLayout.setComponentAlignment(loginPanel, Alignment.MIDDLE_CENTER);
     }
 
+    @FunctionalInterface
+    public interface LoginCallback {
+        boolean login(String username, String password);
+    }
+
     @Override
     public void okAction() {
-        //#TODO проверка корректности логина и пароля
-        Notification.show("Нажали ВХОД");
-
-        MainUI.setUser(true);
-        close();
-        Navigator navi = MainUI.getCurrent().getNavigator();
-
-        String destanation = navi.getState();
-        if (navi.getState().equals("logon")){
-            destanation = "";
+        String pword = password.getValue();
+        password.setValue("");
+        if (!callback.login(login.getValue(), pword)) {
+            //#TODO need localization
+            Notification.show("Login failed");
+            login.focus();
         }
-        navi.navigateTo(destanation);
     }
 
     @Override
     public void cancelAction() {
-        MainUI.setUser(false);
-        close();
-        UI.getCurrent().close();
+        login.setValue("");
+        password.setValue("");
     }
 }

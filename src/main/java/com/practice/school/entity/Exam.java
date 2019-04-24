@@ -16,7 +16,6 @@ public class Exam extends StudentAction{
     private String detail;
 
     @Column(length = 1)
-    //#TODO ограничить оценку
     @Min(1)
     @Max(5)
     private Byte mark;

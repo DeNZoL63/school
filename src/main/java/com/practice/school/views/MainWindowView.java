@@ -29,12 +29,5 @@ public class MainWindowView extends Composite implements View {
 
         UI.getCurrent().getPage().setTitle(headerText);
         setCompositionRoot(form);
-//        form.addComponent(new Label("This is view MAIN"));
-//
-//        ResourceBundle bundle = MainUI.getResourceBundle();
-//        String headerText = bundle.getString("MainHeaderText");
-//
-//        Page.getCurrent().setTitle(headerText);
-//        setCompositionRoot(form);
     }
 }

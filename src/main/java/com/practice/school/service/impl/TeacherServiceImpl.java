@@ -44,8 +44,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Teacher findById(Long id) {
-        Teacher teacher = teacherRepository.findById(id).orElse(null);
-        return teacher;
+        return teacherRepository.findById(id).orElse(null);
     }
 
 }

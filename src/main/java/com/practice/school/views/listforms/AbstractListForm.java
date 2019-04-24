@@ -74,7 +74,6 @@ abstract class AbstractListForm<T extends BaseEntity> extends Composite implemen
             editButton.setEnabled(flag);
             deleteButton.setEnabled(flag);
         });
-//        grid.addContextClickListener(event -> Notification.show(event.toString()));
         grid.setSizeFull();
     }
 

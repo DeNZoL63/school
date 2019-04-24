@@ -16,7 +16,6 @@ public class ExamsView extends AbstractListForm {
 
     public ExamsView() {
         super(Exam.class);
-//        VerticalLayout form = getForm();
         final GridLayout form = getForm();
 
         ResourceBundle bundle = MainUI.getResourceBundle();
@@ -31,14 +30,12 @@ public class ExamsView extends AbstractListForm {
     public void addElement() {
         UI.getCurrent().getNavigator().navigateTo("exam");
         Page.getCurrent().reload();
-//        new ExamView();
     }
 
     @Override
     public void editElement() {
         UI.getCurrent().getNavigator().navigateTo("exam");
         Page.getCurrent().reload();
-//        new ExamView();
     }
 
     @Override

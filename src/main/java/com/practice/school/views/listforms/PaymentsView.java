@@ -16,7 +16,6 @@ public class PaymentsView extends AbstractListForm {
 
     public PaymentsView() {
         super(Payment.class);
-//        VerticalLayout form = getForm();
         final GridLayout form = getForm();
 
         ResourceBundle bundle = MainUI.getResourceBundle();
@@ -32,14 +31,12 @@ public class PaymentsView extends AbstractListForm {
     public void addElement() {
         UI.getCurrent().getNavigator().navigateTo("payment");
         Page.getCurrent().reload();
-        //new PaymentView();
     }
 
     @Override
     public void editElement() {
         UI.getCurrent().getNavigator().navigateTo("payment");
         Page.getCurrent().reload();
-//        new PaymentView();
     }
 
     @Override

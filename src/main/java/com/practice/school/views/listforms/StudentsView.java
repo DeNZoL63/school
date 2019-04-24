@@ -27,7 +27,6 @@ public class StudentsView extends AbstractListForm<Student> {
     public StudentsView(StudentServiceImpl studentService) {
         super(Student.class);
         this.studentService = studentService;
-//        VerticalLayout form = getForm();
         final GridLayout form = getForm();
 
         bundle = MainUI.getResourceBundle();
@@ -89,7 +88,9 @@ public class StudentsView extends AbstractListForm<Student> {
     private void removeItem() {
         final Optional<Student> item = grid.getSelectionModel().getFirstSelectedItem();
 
-        studentService.deleteByID(item.get().getId());
-        setContentGrid();
+        if (item.isPresent()) {
+            studentService.deleteByID(item.get().getId());
+            setContentGrid();
+        }
     }
 }

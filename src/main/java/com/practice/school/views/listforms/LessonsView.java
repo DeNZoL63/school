@@ -16,7 +16,6 @@ public class LessonsView extends AbstractListForm {
 
     public LessonsView() {
         super(Lesson.class);
-//        VerticalLayout form = getForm();
         final GridLayout form = getForm();
 
         ResourceBundle bundle = MainUI.getResourceBundle();
@@ -31,14 +30,12 @@ public class LessonsView extends AbstractListForm {
     public void addElement() {
         UI.getCurrent().getNavigator().navigateTo("lesson");
         Page.getCurrent().reload();
-//        new LessonView();
     }
 
     @Override
     public void editElement() {
         UI.getCurrent().getNavigator().navigateTo("lesson");
         Page.getCurrent().reload();
-//        new LessonView();
     }
 
     @Override

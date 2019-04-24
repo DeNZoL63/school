@@ -1,17 +1,25 @@
 package com.practice.school;
 
-import com.practice.school.interfaces.CommonMethods;
+import com.practice.school.security.SecurityUtils;
 import com.practice.school.views.LogonView;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.PushStateNavigation;
 import com.vaadin.navigator.View;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinService;
+import com.vaadin.shared.communication.PushMode;
+import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -20,6 +28,9 @@ import java.util.ResourceBundle;
 @PushStateNavigation
 @SpringView
 public class MainUI extends UI implements View {
+
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     private static final String LANGUAGE_EN = "en";
     private static final String COUNTRY_EN = "EN";
@@ -32,9 +43,6 @@ public class MainUI extends UI implements View {
 
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle("bundle", localeRU);
 
-    //#TODO нормальные куки заиплить
-    private static boolean user = false;
-
     private GridLayout mainLayout;
     private CssLayout viewContainer = new CssLayout();
 
@@ -46,15 +54,11 @@ public class MainUI extends UI implements View {
         initNavigator();
         setupLayout();
         addMenu();
-        CommonMethods.checkUser();
-    }
-
-    public static boolean isUser() {
-        return user;
-    }
-
-    public static void setUser(boolean user) {
-        MainUI.user = user;
+        if (SecurityUtils.isLoggedIn()) {
+            setContent(mainLayout);
+        } else {
+            setContent(new LogonView(this::login));
+        }
     }
 
     public static void setResourceBundleRU() {
@@ -76,12 +80,9 @@ public class MainUI extends UI implements View {
     private void setupLayout() {
         mainLayout = new GridLayout(2, 1);
         viewContainer.setSizeFull();
-
-        setContent(mainLayout);
     }
 
     private void addMenu() {
-
         CssLayout menu = getMenu();
 
         Panel panel = new Panel();
@@ -101,18 +102,6 @@ public class MainUI extends UI implements View {
     private void initNavigator() {
         Navigator navigator = new Navigator(this, viewContainer);
         navigator.addProvider(viewProvider);
-//        navigator.addView("", LogonView.class);
-//        navigator.addView("main", MainWindowView.class);
-//        navigator.addView("students", StudentsView.class);
-//        navigator.addView("teachers", TeachersView.class);
-//        navigator.addView("lessons", LessonsView.class);
-//        navigator.addView("exams", ExamsView.class);
-//        navigator.addView("payments", PaymentsView.class);
-//        navigator.addView("student", StudentView.class);
-//        navigator.addView("teacher", TeacherView.class);
-//        navigator.addView("lesson", LessonView.class);
-//        navigator.addView("exam", ExamView.class);
-//        navigator.addView("payment", PaymentView.class);
     }
 
     private CssLayout getMenu() {
@@ -135,10 +124,17 @@ public class MainUI extends UI implements View {
         Button paymentsButton = new Button(resourceBundle.getString("PaymentsMenuKey"), e -> getNavigator().navigateTo("payments"));
         paymentsButton.addStyleNames(ValoTheme.BUTTON_QUIET, ValoTheme.MENU_ITEM);
 
-        Button exit = new Button(resourceBundle.getString("ExitMenuKey"), e -> new LogonView());
+        Button exit = new Button(resourceBundle.getString("ExitMenuKey"), e -> logout());
         exit.addStyleNames(ValoTheme.BUTTON_QUIET, ValoTheme.MENU_ITEM);
 
-        CssLayout menu = new CssLayout(title, studentsButton, teachersButton, lessonsButton, examsButton, paymentsButton, exit);
+        CssLayout menu = new CssLayout(
+                title,
+                studentsButton,
+                teachersButton,
+                lessonsButton,
+                examsButton,
+                paymentsButton,
+                exit);
 
         UI.getCurrent().getPage().getStyles().add(
                 ".my-menu-style \n" +
@@ -151,8 +147,32 @@ public class MainUI extends UI implements View {
                 "}");
 
         menu.addStyleName("my-menu-style");
-        exit.addStyleName("my-menu-styles");
 
         return menu;
+    }
+
+    private void logout() {
+        getPage().reload();
+        getSession().close();
+    }
+
+    private boolean login(String username, String password) {
+        try {
+            Authentication token = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            // Reinitialize the session to protect against session fixation attacks. This does not work
+            // with websocket communication.
+            VaadinService.reinitializeSession(VaadinService.getCurrentRequest());
+            SecurityContextHolder.getContext().setAuthentication(token);
+            // Now when the session is reinitialized, we can enable websocket communication. Or we could have just
+            // used WEBSOCKET_XHR and skipped this step completely.
+            getPushConfiguration().setTransport(Transport.WEBSOCKET);
+            getPushConfiguration().setPushMode(PushMode.AUTOMATIC);
+            // Show the main UI
+            setContent(mainLayout);
+            return true;
+        } catch (AuthenticationException ex) {
+            return false;
+        }
     }
 }

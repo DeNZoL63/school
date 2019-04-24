@@ -21,7 +21,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ResourceBundle;
 
-//@UIScope
 @SpringView(name = "student")
 public class StudentView extends PersonForm {
 
@@ -222,7 +221,7 @@ public class StudentView extends PersonForm {
         Upload upload = new Upload("", (Upload.Receiver) (filename, mimeType) -> {
             // Create upload stream
             OutputStream fos = null; // Stream to write to
-            String nameOfFile = "";
+            String nameOfFile;
             try {
                 // Open the file for writing.
                 if (student.getId() == null) {
@@ -230,17 +229,17 @@ public class StudentView extends PersonForm {
                     new Notification("ВНИМАНИЕ",
                             "Сначала сохраните элемент",
                             Notification.Type.WARNING_MESSAGE).show(Page.getCurrent());
-                    nameOfFile = pathPhoto + "tmp.jpg";
 
                     throw new Exception();
-//                    return null;
                 }else{
                     nameOfFile = pathPhoto + student.getId() + "_student.jpg";
                 }
                 photoFile = new File(nameOfFile);
                 if (photoFile.exists()){
-                    photoFile.delete();
-                    photoFile = new File(nameOfFile);
+                    boolean isDelete = photoFile.delete();
+                    if (isDelete) {
+                        photoFile = new File(nameOfFile);
+                    }
                 }
                 fos = new FileOutputStream(photoFile);
             } catch (final FileNotFoundException e) {
@@ -254,9 +253,7 @@ public class StudentView extends PersonForm {
             return fos; // Return the output stream to write to
         });
 
-        upload.addFinishedListener(event -> {
-            photoImage.setSource(new FileResource(photoFile));
-        });
+        upload.addFinishedListener(event -> photoImage.setSource(new FileResource(photoFile)));
 
         upload.addFailedListener(event -> {
             photoImage.setSource(new FileResource(photoNotFoundFile));
