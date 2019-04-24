@@ -14,6 +14,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class SchoolApplication {
 
@@ -24,13 +28,30 @@ public class SchoolApplication {
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 			PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+			FileInputStream fileInputStream;
+			Properties properties = new Properties();
 
-			auth
-				.inMemoryAuthentication()
-				.withUser("admin").password(encoder.encode("admin")).roles("ADMIN", "USER")
-				.and()
-				.withUser("user").password(encoder.encode("user")).roles("USER")
-			;
+			try {
+				//TODO wrong using path
+				fileInputStream = new FileInputStream("src/main/resources/users.properties");
+				properties.load(fileInputStream);
+
+				int count = properties.size() / 3;
+
+				for (int i = 1; i <= count; i++) {
+					if (!properties.containsKey("user" + i + ".username")
+							|| !properties.containsKey("user" + i + ".password")
+							|| !properties.containsKey("user" + i + ".role")) {
+						continue;
+					}
+					auth.inMemoryAuthentication()
+							.withUser(properties.getProperty("user" + i + ".username"))
+							.password(encoder.encode(properties.getProperty("user" + i + ".password")))
+							.roles(properties.getProperty("user" + i + ".role"));
+				}
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+			}
 		}
 
 		@Bean
