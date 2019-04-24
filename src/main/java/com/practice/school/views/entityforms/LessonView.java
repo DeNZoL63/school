@@ -21,6 +21,21 @@ public class LessonView extends StudentActionForm {
         fillForm();
     }
 
+    @Override
+    public void okAction() {
+        closeForm();
+    }
+
+    @Override
+    public void applyAction() {
+        closeForm();
+    }
+
+    @Override
+    public void cancelAction() {
+        closeForm();
+    }
+
     private void fillForm() {
         FormLayout formLayout = getFormLayout();
 
@@ -45,20 +60,5 @@ public class LessonView extends StudentActionForm {
     private void closeForm() {
         close();
         MainUI.getCurrent().getNavigator().navigateTo("lessons");
-    }
-
-    @Override
-    public void applyAction() {
-        closeForm();
-    }
-
-    @Override
-    public void okAction() {
-        closeForm();
-    }
-
-    @Override
-    public void cancelAction() {
-        closeForm();
     }
 }

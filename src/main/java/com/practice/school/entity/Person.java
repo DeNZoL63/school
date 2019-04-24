@@ -22,7 +22,7 @@ public abstract class Person extends BaseEntity{
     Person() {
     }
 
-    public Person(Long id) {
+    Person(Long id) {
         super(id);
     }
 
@@ -33,7 +33,7 @@ public abstract class Person extends BaseEntity{
         this.birthday = birthday;
     }
 
-    public Person(Long id, String surname, String name, String patronymic, LocalDate birthday) {
+    Person(Long id, String surname, String name, String patronymic, LocalDate birthday) {
         super(id);
         this.surname = surname;
         this.name = name;

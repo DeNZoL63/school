@@ -1,30 +1,29 @@
 package com.practice.school.entity;
 
 import javax.persistence.Column;
-import java.util.Date;
+import java.time.LocalDate;
 
 public abstract class StudentAction extends BaseEntity {
 
     @Column
-    private Student student;
-
+    private LocalDate date;
     @Column
-    private Date date;
+    private Student student;
 
     StudentAction() {
     }
 
-    public StudentAction(Long id) {
+    StudentAction(Long id) {
         super(id);
     }
 
-    public StudentAction(Long id, Student student, Date date) {
+    StudentAction(Long id, Student student, LocalDate date) {
         super(id);
         this.student = student;
         this.date = date;
     }
 
-    StudentAction(Student student, Date date) {
+    StudentAction(Student student, LocalDate date) {
         this.student = student;
         this.date = date;
     }
@@ -37,11 +36,11 @@ public abstract class StudentAction extends BaseEntity {
         this.student = student;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 }

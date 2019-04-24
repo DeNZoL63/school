@@ -27,6 +27,28 @@ public class LogonView extends VerticalLayout implements View, OkCancelActions{
         init();
     }
 
+    @FunctionalInterface
+    public interface LoginCallback {
+        boolean login(String username, String password);
+    }
+
+    @Override
+    public void okAction() {
+        String pword = password.getValue();
+        password.setValue("");
+        if (!callback.login(login.getValue(), pword)) {
+            //#TODO need localization
+            Notification.show("Login failed");
+            login.focus();
+        }
+    }
+
+    @Override
+    public void cancelAction() {
+        login.setValue("");
+        password.setValue("");
+    }
+
     private void init() {
         resourceBundle = MainUI.getResourceBundle();
 
@@ -78,27 +100,5 @@ public class LogonView extends VerticalLayout implements View, OkCancelActions{
         mainLayout.setExpandRatio(loginPanel, 0.95f);
         mainLayout.setSizeFull();
         mainLayout.setComponentAlignment(loginPanel, Alignment.MIDDLE_CENTER);
-    }
-
-    @FunctionalInterface
-    public interface LoginCallback {
-        boolean login(String username, String password);
-    }
-
-    @Override
-    public void okAction() {
-        String pword = password.getValue();
-        password.setValue("");
-        if (!callback.login(login.getValue(), pword)) {
-            //#TODO need localization
-            Notification.show("Login failed");
-            login.focus();
-        }
-    }
-
-    @Override
-    public void cancelAction() {
-        login.setValue("");
-        password.setValue("");
     }
 }

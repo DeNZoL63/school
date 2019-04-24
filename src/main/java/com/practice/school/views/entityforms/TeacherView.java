@@ -22,6 +22,7 @@ public class TeacherView extends PersonForm {
     private TeacherServiceImpl teacherService;
     @Autowired
     private TeachersView teachersView;
+
     private ResourceBundle bundle;
     private Teacher teacher = new Teacher();
     private Binder<Teacher> binder = new Binder<>(Teacher.class);
@@ -33,11 +34,6 @@ public class TeacherView extends PersonForm {
     private TextField experienceField;
     private TextField licenseNumberField;
 
-    @Override
-    public Component getViewComponent() {
-        return teachersView;
-    }
-
     public TeacherView() {
         customForm();
         fillForm();
@@ -45,6 +41,48 @@ public class TeacherView extends PersonForm {
 
         binder.bindInstanceFields(new Teacher());
         binder.validate();
+    }
+
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+        String parameterID = event.getParameterMap().get("id");
+
+        if (parameterID == null || parameterID.equals("0")){
+            return;
+        }
+
+        this.teacher = teacherService.findById(Long.valueOf(parameterID));
+
+        if (this.teacher == null){
+            return;
+        }
+
+        binder.setBean(this.teacher);
+        binder.validate();
+    }
+
+    @Override
+    public void okAction() {
+        validateAll();
+        if (createTeacher()){
+            closeForm();
+        }
+    }
+
+    @Override
+    public void applyAction() {
+        validateAll();
+        createTeacher();
+    }
+
+    @Override
+    public void cancelAction() {
+        closeForm();
+    }
+
+    @Override
+    public Component getViewComponent() {
+        return teachersView;
     }
 
     private void fillForm() {
@@ -62,20 +100,6 @@ public class TeacherView extends PersonForm {
         bundle = MainUI.getResourceBundle();
         UI.getCurrent().getPage().setTitle(bundle.getString("TitleFormTeacher"));
         setHeaderTitle(bundle.getString("TitleFormTeacher"));
-    }
-
-    @Override
-    public void applyAction() {
-        validateAll();
-        createTeacher();
-    }
-
-    @Override
-    public void okAction() {
-        validateAll();
-        if (createTeacher()){
-            closeForm();
-        }
     }
 
     private void bindFields() {
@@ -97,7 +121,6 @@ public class TeacherView extends PersonForm {
                         bundle.getString("FieldLengthValidationError"))
                 .withValidator(validatorLetters)
                 .bind(Teacher::getSurname, Teacher::setSurname);
-
 
         binder.forField(nameField)
                 .withValidator(TeacherView::checkLengthMoreTwo,
@@ -147,11 +170,6 @@ public class TeacherView extends PersonForm {
     private void validateAll() {
     }
 
-    @Override
-    public void cancelAction() {
-        closeForm();
-    }
-
     private void closeForm() {
         close();
         teachersView.setContentGrid();
@@ -164,23 +182,5 @@ public class TeacherView extends PersonForm {
 
     private static boolean checkLengthNotEmpty(String s) {
         return s.length() > 0;
-    }
-
-    @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event) {
-        String parameterID = event.getParameterMap().get("id");
-
-        if (parameterID == null || parameterID.equals("0")){
-            return;
-        }
-
-        this.teacher = teacherService.findById(Long.valueOf(parameterID));
-
-        if (this.teacher == null){
-            return;
-        }
-
-        binder.setBean(this.teacher);
-        binder.validate();
     }
 }

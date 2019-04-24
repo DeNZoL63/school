@@ -1,9 +1,11 @@
 package com.practice.school.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.util.Date;
+import java.time.LocalDate;
 
+@Entity
 @Table(name = "Payment")
 public class Payment extends StudentAction {
 
@@ -17,12 +19,12 @@ public class Payment extends StudentAction {
         super(id);
     }
 
-    public Payment(Student student, Date date, double amount) {
+    public Payment(Student student, LocalDate date, double amount) {
         super(student, date);
         this.amount = amount;
     }
 
-    public Payment(long id, Student student, Date date, double amount) {
+    public Payment(long id, Student student, LocalDate date, double amount) {
         super(id, student, date);
         this.amount = amount;
     }

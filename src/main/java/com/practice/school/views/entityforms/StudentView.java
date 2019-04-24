@@ -28,6 +28,7 @@ public class StudentView extends PersonForm {
     private StudentServiceImpl studentService;
     @Autowired
     private StudentsView studentsView;
+
     private ResourceBundle bundle = MainUI.getResourceBundle();
     private TextField idField = getIdField();
     private TextField nameField = getNameField();
@@ -44,11 +45,6 @@ public class StudentView extends PersonForm {
     private File photoNotFoundFile = new File(pathPhoto + "notfound.jpg");
     private File photoFile = new File(pathPhoto + student.getId() + "_student.jpg");
 
-
-    @Override
-    public Component getViewComponent() {
-        return studentsView;
-    }
 
     public StudentView() {
         customForm();
@@ -104,6 +100,11 @@ public class StudentView extends PersonForm {
         closeForm();
     }
 
+    @Override
+    public Component getViewComponent() {
+        return studentsView;
+    }
+
     private void bindFields() {
         String patternChars = "^[a-zA-Zа-яА-Я]{2,50}$";
         String patternNumbers = "^\\+[0-9]{11,11}$";
@@ -122,7 +123,6 @@ public class StudentView extends PersonForm {
                 .withValidator(validatorLetters)
                 .bind(Student::getSurname, Student::setSurname);
 
-
         binder.forField(nameField)
                 .withValidator(StudentView::checkLengthMoreTwo,
                         bundle.getString("FieldLengthValidationError"))
@@ -130,7 +130,6 @@ public class StudentView extends PersonForm {
                         bundle.getString("FieldLengthValidationError"))
                 .withValidator(validatorLetters)
                 .bind(Student::getName, Student::setName);
-
 
         binder.forField(patronymicField)
                 .withValidator(StudentView::checkLengthMoreTwo,
@@ -140,11 +139,9 @@ public class StudentView extends PersonForm {
                 .withValidator(validatorLetters)
                 .bind(Student::getPatronymic, Student::setPatronymic);
 
-
         binder.forField(phoneField)
                 .withValidator(validatorNumbers)
                 .bind(Student::getPhone, Student::setPhone);
-
 
         binder.bind(birthdayField, Student::getBirthday, Student::setBirthday);
         binder.bind(photoField, Student::getPhoto, Student::setPhoto);

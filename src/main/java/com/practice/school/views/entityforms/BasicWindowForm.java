@@ -22,7 +22,7 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
     private FormLayout formLayout;
     private TextField idField;
 
-    public BasicWindowForm() {
+    BasicWindowForm() {
         setWindowMode(WindowMode.NORMAL);
         this.setModal(true);
         this.setWidth("50%");
@@ -68,6 +68,10 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
         return mainBody;
     }
 
+    TextField getIdField() {
+        return idField;
+    }
+
     void setHeaderTitle(String title) {
         header.setValue(title);
         header.setStyleName(ValoTheme.LABEL_H1);
@@ -104,10 +108,6 @@ abstract class BasicWindowForm extends Window implements View, OkCancelActions, 
         buttonsGroup.setWidthUndefined();
         buttonsGroup.setHeight("100%");
         return buttonsGroup;
-    }
-
-    public TextField getIdField() {
-        return idField;
     }
 
     private void fillMainBody(){

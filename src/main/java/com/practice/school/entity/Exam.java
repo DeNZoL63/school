@@ -4,7 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Table(name = "Exam")
 public class Exam extends StudentAction{
@@ -28,14 +28,14 @@ public class Exam extends StudentAction{
         super(id);
     }
 
-    public Exam(long id, Student student, Date date, ExamKindEnum examKind, String detail, Byte mark) {
+    public Exam(long id, Student student, LocalDate date, ExamKindEnum examKind, String detail, Byte mark) {
         super(id, student, date);
         this.examKind = examKind;
         this.detail = detail;
         this.mark = mark;
     }
 
-    public Exam(Student student, Date date, ExamKindEnum examKind, String detail, Byte mark) {
+    public Exam(Student student, LocalDate date, ExamKindEnum examKind, String detail, Byte mark) {
         super(student, date);
         this.examKind = examKind;
         this.detail = detail;

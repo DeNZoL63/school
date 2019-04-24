@@ -3,7 +3,7 @@ package com.practice.school.entity;
 import javax.persistence.Column;
 import javax.persistence.Table;
 import java.sql.Time;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Table(name = "Lesson")
 public class Lesson extends StudentAction {
@@ -24,14 +24,14 @@ public class Lesson extends StudentAction {
         super(id);
     }
 
-    public Lesson(long id, Student student, Date date, Time time, Teacher teacher, String gpsTrack) {
+    public Lesson(long id, Student student, LocalDate date, Time time, Teacher teacher, String gpsTrack) {
         super(id, student, date);
         this.time = time;
         this.teacher = teacher;
         this.gpsTrack = gpsTrack;
     }
 
-    public Lesson(Student student, Date date, Time time, Teacher teacher, String gpsTrack) {
+    public Lesson(Student student, LocalDate date, Time time, Teacher teacher, String gpsTrack) {
         super(student, date);
         this.time = time;
         this.teacher = teacher;

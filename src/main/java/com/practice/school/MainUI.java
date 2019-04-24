@@ -30,7 +30,9 @@ import java.util.ResourceBundle;
 public class MainUI extends UI implements View {
 
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private SpringViewProvider viewProvider;
 
     private static final String LANGUAGE_EN = "en";
     private static final String COUNTRY_EN = "EN";
@@ -46,9 +48,6 @@ public class MainUI extends UI implements View {
     private GridLayout mainLayout;
     private CssLayout viewContainer = new CssLayout();
 
-    @Autowired
-    private SpringViewProvider viewProvider;
-
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         initNavigator();
@@ -61,6 +60,10 @@ public class MainUI extends UI implements View {
         }
     }
 
+    public static ResourceBundle getResourceBundle() {
+        return resourceBundle;
+    }
+
     public static void setResourceBundleRU() {
         resourceBundle = ResourceBundle.getBundle("bundle", localeRU);
     }
@@ -69,39 +72,8 @@ public class MainUI extends UI implements View {
         resourceBundle = ResourceBundle.getBundle("bundle", localeEN);
     }
 
-    public static ResourceBundle getResourceBundle() {
-        return resourceBundle;
-    }
-
     public void setViewProvider(SpringViewProvider viewProvider) {
         this.viewProvider = viewProvider;
-    }
-
-    private void setupLayout() {
-        mainLayout = new GridLayout(2, 1);
-        viewContainer.setSizeFull();
-    }
-
-    private void addMenu() {
-        CssLayout menu = getMenu();
-
-        Panel panel = new Panel();
-        panel.setContent(menu);
-        panel.setWidthUndefined();
-        panel.setHeight("100%");
-
-        mainLayout.addComponent(panel, 0, 0);
-        mainLayout.addComponent(viewContainer, 1, 0);
-        mainLayout.setColumnExpandRatio(0, 1);
-        mainLayout.setColumnExpandRatio(1, 99);
-
-        mainLayout.setSpacing(false);
-        mainLayout.setSizeFull();
-    }
-
-    private void initNavigator() {
-        Navigator navigator = new Navigator(this, viewContainer);
-        navigator.addProvider(viewProvider);
     }
 
     private CssLayout getMenu() {
@@ -138,22 +110,17 @@ public class MainUI extends UI implements View {
 
         UI.getCurrent().getPage().getStyles().add(
                 ".my-menu-style \n" +
-                " .valo .valo-menu-item:focus, .valo .valo-menu-item:hover, .valo .valo-menu-item.selected {\n" +
-                    " color: #3c66ca;\n" +
-                    "}\n" +
-                " .valo .v-button {\n" +
-                    " background-image: linear-gradient(to bottom,#b5e7fb 2%, #81cff5 98%);\n" +
-                    " text-align: left;\n" +
-                "}");
+                        " .valo .valo-menu-item:focus, .valo .valo-menu-item:hover, .valo .valo-menu-item.selected {\n" +
+                        " color: #3c66ca;\n" +
+                        "}\n" +
+                        " .valo .v-button {\n" +
+                        " background-image: linear-gradient(to bottom,#b5e7fb 2%, #81cff5 98%);\n" +
+                        " text-align: left;\n" +
+                        "}");
 
         menu.addStyleName("my-menu-style");
 
         return menu;
-    }
-
-    private void logout() {
-        getPage().reload();
-        getSession().close();
     }
 
     private boolean login(String username, String password) {
@@ -174,5 +141,37 @@ public class MainUI extends UI implements View {
         } catch (AuthenticationException ex) {
             return false;
         }
+    }
+
+    private void setupLayout() {
+        mainLayout = new GridLayout(2, 1);
+        viewContainer.setSizeFull();
+    }
+
+    private void addMenu() {
+        CssLayout menu = getMenu();
+
+        Panel panel = new Panel();
+        panel.setContent(menu);
+        panel.setWidthUndefined();
+        panel.setHeight("100%");
+
+        mainLayout.addComponent(panel, 0, 0);
+        mainLayout.addComponent(viewContainer, 1, 0);
+        mainLayout.setColumnExpandRatio(0, 1);
+        mainLayout.setColumnExpandRatio(1, 99);
+
+        mainLayout.setSpacing(false);
+        mainLayout.setSizeFull();
+    }
+
+    private void initNavigator() {
+        Navigator navigator = new Navigator(this, viewContainer);
+        navigator.addProvider(viewProvider);
+    }
+
+    private void logout() {
+        getPage().reload();
+        getSession().close();
     }
 }

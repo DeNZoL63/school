@@ -13,7 +13,7 @@ public abstract class BaseEntity {
     public BaseEntity() {
     }
 
-    public BaseEntity(Long id) {
+    BaseEntity(Long id) {
         this.id = id;
     }
 

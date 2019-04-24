@@ -22,6 +22,7 @@ public class TeachersView extends AbstractListForm {
 
     @Autowired
     private final TeacherServiceImpl teacherService;
+
     private Grid<Teacher> grid = getGrid();
     private final ResourceBundle bundle;
 
@@ -40,7 +41,6 @@ public class TeachersView extends AbstractListForm {
         Page.getCurrent().setTitle(headerText);
         setCompositionRoot(form);
     }
-
 
     @Override
     public void addElement() {
@@ -73,15 +73,6 @@ public class TeachersView extends AbstractListForm {
         UI.getCurrent().getNavigator().navigateTo("teacher/id=" + id);
     }
 
-    private void removeItem() {
-        final Optional<Teacher> item = grid.getSelectionModel().getFirstSelectedItem();
-
-        item.ifPresent(teacher -> {
-            teacherService.deleteByID(teacher.getId());
-            setContentGrid();
-        });
-    }
-
     public void setContentGrid() {
         List<Teacher> list = teacherService.getAll();
         grid.setItems(list);
@@ -93,6 +84,15 @@ public class TeachersView extends AbstractListForm {
                 "licenseNumber",
                 "experience"
         );
+    }
+
+    private void removeItem() {
+        final Optional<Teacher> item = grid.getSelectionModel().getFirstSelectedItem();
+
+        item.ifPresent(teacher -> {
+            teacherService.deleteByID(teacher.getId());
+            setContentGrid();
+        });
     }
 
 

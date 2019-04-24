@@ -21,6 +21,7 @@ public class StudentsView extends AbstractListForm<Student> {
 
     @Autowired
     private final StudentServiceImpl studentService;
+
     private Grid<Student> grid = getGrid();
     private final ResourceBundle bundle;
 

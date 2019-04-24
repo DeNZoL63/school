@@ -44,37 +44,14 @@ abstract class AbstractListForm<T extends BaseEntity> extends Composite implemen
         return form;
     }
 
-    void setHeaderTitle(String title) {
-        header.setValue(title);
-        header.setStyleName(ValoTheme.LABEL_H1);
-        header.setSizeUndefined();
-    }
-
     Grid<T> getGrid() {
         return grid;
     }
 
-    private void initExpandRatio() {
-        form.setColumnExpandRatio(0, 99);
-        form.setColumnExpandRatio(1, 1);
-        form.setRowExpandRatio(0, 1);
-        form.setRowExpandRatio(1, 1);
-        form.setRowExpandRatio(2, 98);
-    }
-
-    private void createGrid(Class<T> beanType) {
-        grid = new Grid<>(beanType);
-        grid.addItemClickListener(event -> {
-            if (event.getMouseEventDetails().isDoubleClick()) {
-                editElementDoubleClick(event.getItem().getId());
-            }
-        });
-        grid.addSelectionListener(event -> {
-            boolean flag = event.getFirstSelectedItem().isPresent();
-            editButton.setEnabled(flag);
-            deleteButton.setEnabled(flag);
-        });
-        grid.setSizeFull();
+    void setHeaderTitle(String title) {
+        header.setValue(title);
+        header.setStyleName(ValoTheme.LABEL_H1);
+        header.setSizeUndefined();
     }
 
     private HorizontalLayout addButtons(ResourceBundle bundle) {
@@ -107,5 +84,28 @@ abstract class AbstractListForm<T extends BaseEntity> extends Composite implemen
         buttonsGroup.addComponents(addButton, editButton, deleteButton);
         buttonsGroup.setSizeUndefined();
         return buttonsGroup;
+    }
+
+    private void initExpandRatio() {
+        form.setColumnExpandRatio(0, 99);
+        form.setColumnExpandRatio(1, 1);
+        form.setRowExpandRatio(0, 1);
+        form.setRowExpandRatio(1, 1);
+        form.setRowExpandRatio(2, 98);
+    }
+
+    private void createGrid(Class<T> beanType) {
+        grid = new Grid<>(beanType);
+        grid.addItemClickListener(event -> {
+            if (event.getMouseEventDetails().isDoubleClick()) {
+                editElementDoubleClick(event.getItem().getId());
+            }
+        });
+        grid.addSelectionListener(event -> {
+            boolean flag = event.getFirstSelectedItem().isPresent();
+            editButton.setEnabled(flag);
+            deleteButton.setEnabled(flag);
+        });
+        grid.setSizeFull();
     }
 }

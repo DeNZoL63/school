@@ -24,6 +24,21 @@ public class ExamView extends StudentActionForm {
         fillForm();
     }
 
+    @Override
+    public void okAction() {
+        closeForm();
+    }
+
+    @Override
+    public void applyAction() {
+        closeForm();
+    }
+
+    @Override
+    public void cancelAction() {
+        closeForm();
+    }
+
     private void customForm() {
         bundle = MainUI.getResourceBundle();
         UI.getCurrent().getPage().setTitle(bundle.getString("TitleFormExam"));
@@ -41,21 +56,6 @@ public class ExamView extends StudentActionForm {
                 examKindField,
                 detailField,
                 markField);
-    }
-
-    @Override
-    public void applyAction() {
-        closeForm();
-    }
-
-    @Override
-    public void okAction() {
-        closeForm();
-    }
-
-    @Override
-    public void cancelAction() {
-        closeForm();
     }
 
     private void closeForm() {

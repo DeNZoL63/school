@@ -11,11 +11,14 @@ import java.util.ResourceBundle;
 @SpringView
 abstract class StudentActionForm extends BasicWindowForm {
 
+    private final DateField dateField;
+    private final ComboBox<Student> studentField;
+
     StudentActionForm() {
 
         ResourceBundle bundle = MainUI.getResourceBundle();
-        final DateField dateField = new DateField(bundle.getString("DateField"));
-        final ComboBox<Student> studentField = new ComboBox<>(bundle.getString("StudentField"));
+        dateField = new DateField(bundle.getString("DateField"));
+        studentField = new ComboBox<>(bundle.getString("StudentField"));
         dateField.setLocale(bundle.getLocale());
 
         getFormLayout().addComponents(
@@ -23,4 +26,11 @@ abstract class StudentActionForm extends BasicWindowForm {
                 dateField);
     }
 
+    DateField getDateField() {
+        return dateField;
+    }
+
+    ComboBox<Student> getStudentField() {
+        return studentField;
+    }
 }

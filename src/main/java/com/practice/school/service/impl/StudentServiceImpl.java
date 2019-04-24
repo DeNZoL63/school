@@ -46,4 +46,5 @@ public class StudentServiceImpl implements StudentService {
     public Student editStudent(Student student) {
         return studentRepository.saveAndFlush(student);
     }
+
 }
